@@ -7,11 +7,32 @@ public class King extends Piece {
 			Piece attacker4) {
 		if(attacker1.owner==owner)
 			return false;
-		int ans=(attacker2==null?0:1-(attacker2.owner&owner))+
-				(attacker3==null?0:1-(attacker3.owner&owner))+
-				(attacker4==null?0:1-(attacker4.owner&owner));
-			
-		return ans>=2;
+		// throne    101
+		// empty      11
+		// enemy      10
+		// guard king 01
+		// castel     00
+		int ans=0;
+		if (attacker2!=null) {
+			if(attacker2.owner==3)
+				return false;
+			ans+=1-(attacker2.owner&owner);
+		}
+		if (attacker3!=null){
+			if(attacker3.owner==3)
+				return false;
+			ans+=1-(attacker3.owner&owner);
+		}
+		if (attacker4!=null){
+			if(attacker4.owner==3)
+				return false;
+			ans+=1-(attacker4.owner&owner);
+		}
+		if(ans>=2)
+			return true;
+		return false;
+		
+		
 	}
 
 	@Override
