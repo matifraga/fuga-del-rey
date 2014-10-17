@@ -4,7 +4,7 @@ public class BigThrone extends Throne{
 
 	@Override
 	public boolean canJumpBy(Piece piece) {
-		if(piece.getName()=="Guard")
+		if(piece.getName().equals("Guard"))
 			return false;
 		return true;
 	}

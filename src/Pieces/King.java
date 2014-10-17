@@ -2,6 +2,11 @@ package Pieces;
 
 public class King extends Piece {
 
+	public King(){
+		this.name="King";
+		this.owner=1;
+	}
+	
 	@Override
 	public boolean getKilled(Piece attacker1, Piece attacker2, Piece attacker3,
 			Piece attacker4) {
