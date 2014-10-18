@@ -18,11 +18,8 @@ import clases.Board;
 public class Drawing extends JPanel {
 
 	private VisualGame game;
+	private ClickManager clickManager;
 	private static int squareSize=40;
-
-	public Drawing(VisualGame game){
-		this.game=game;
-	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -43,6 +40,24 @@ public class Drawing extends JPanel {
 						squareSize * (1 + j),squareSize * (1 + i), this);*/
 			}
 		}
-
+		if(clickManager.getSquareClicked()!=null){
+			g2d.setColor(Color.RED);
+			int i=clickManager.getSquareClicked().x;
+			int j=clickManager.getSquareClicked().y;
+			g2d.fillRect((j+1)*squareSize, (i+1)*squareSize, squareSize, squareSize);
+			/*g2d.drawImage(
+			Toolkit.getDefaultToolkit().getImage("Images/" + board.getPiece(i, j).getName()+ ".png"),
+			squareSize * (1 + j),squareSize * (1 + i), this);*/
+		}
 	}
+
+	public void setGame(VisualGame game) {
+		this.game = game;
+	}
+
+	public void setClickManager(ClickManager clickManager) {
+		this.clickManager = clickManager;
+	}
+	
+	
 }

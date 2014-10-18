@@ -13,4 +13,8 @@ public abstract class Piece {
 	public String getName(){
 		return name;
 	}
+	
+	public int getOwner(){
+		return owner;
+	}
 }
