@@ -41,6 +41,5 @@ public class VisualGame extends Game {
 		frame.setVisible(true);
 		drawing.repaint();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}	
-	
+	}		
 }

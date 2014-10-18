@@ -29,15 +29,15 @@ public class Drawing extends JPanel {
 			for (int j = 0; j < board.getSize(); j++) {
 
 				if ((i + j) % 2 == 0)
-					g2d.setColor(Color.GRAY);
-				else
 					g2d.setColor(Color.BLACK);
+				else
+					g2d.setColor(Color.GRAY);
 				g2d.fillRect(squareSize * (1 + j), squareSize * (1 + i),
 						squareSize, squareSize);
 				//Tenemos que ver que hacemos con el Empty.png
-				/*g2d.drawImage(
+				g2d.drawImage(
 						Toolkit.getDefaultToolkit().getImage("Images/" + board.getPiece(i, j).getName()+ ".png"),
-						squareSize * (1 + j),squareSize * (1 + i), this);*/
+						squareSize * (1 + j),squareSize * (1 + i), this);
 			}
 		}
 		if(clickManager.getSquareClicked()!=null){
@@ -45,9 +45,9 @@ public class Drawing extends JPanel {
 			int i=clickManager.getSquareClicked().x;
 			int j=clickManager.getSquareClicked().y;
 			g2d.fillRect((j+1)*squareSize, (i+1)*squareSize, squareSize, squareSize);
-			/*g2d.drawImage(
+			g2d.drawImage(
 			Toolkit.getDefaultToolkit().getImage("Images/" + board.getPiece(i, j).getName()+ ".png"),
-			squareSize * (1 + j),squareSize * (1 + i), this);*/
+			squareSize * (1 + j),squareSize * (1 + i), this);
 		}
 	}
 

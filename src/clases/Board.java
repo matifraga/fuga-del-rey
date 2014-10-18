@@ -6,6 +6,7 @@ import Pieces.Fighter;
 import Pieces.King;
 import Pieces.Piece;
 import Pieces.SmallThrone;
+import Pieces.Throne;
 import Pieces.Tower;
 
 public class Board {
@@ -21,7 +22,7 @@ public class Board {
 	}
 	
 	public Piece getPiece(int i,int j){
-		if(i<0 || i>size || j<0 || j>size)
+		if(i<0 || i>=size || j<0 || j>=size)
 			return null;
 		return board[i][j];
 	}
@@ -66,7 +67,7 @@ public class Board {
 	
 	private void putThrone(int i, int j) {
 		if(board[i][j].getName().equals("Empty"))
-			board[i][j]=(size<12?new SmallThrone():new BigThrone());
+			board[i][j]=getThrone();
 		
 	}
 
@@ -76,5 +77,18 @@ public class Board {
 		return size;
 	}
 
-	public int value(){return 0;};
+	public int value(){return 0;}
+
+	public Throne getThrone(){
+		return (size<12?new SmallThrone():new BigThrone());
+	}
+	
+	public void move(int x1, int y1, int x2, int y2) {
+		board[x2][y2]=board[x1][y1];
+		removePiece(x1, y1);
+	}
+
+	public void removePiece(int x1, int y1) {
+		board[x1][y1]=(x1==size/2 && y1==size/2)?getThrone():new Empty();
+	};
 }

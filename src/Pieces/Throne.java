@@ -14,7 +14,8 @@ public abstract class Throne extends Piece{
 
 	@Override
 	public boolean canStepBy(Piece piece) {
-		if(piece.getName()=="King")
+		System.out.println(piece.getName());
+		if(piece.getName().equals("King"))
 			return true;
 		return false;
 	}
