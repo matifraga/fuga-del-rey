@@ -28,25 +28,30 @@ public class Game {
 		board.putTowersAndThrone();		
 	}
 	
+	public void move(int x1, int y1, int x2, int y2){
+		board.move(x1,y1,x2,y2);
+		int dx[]={1,0,-1,0};
+		int dy[]={0,1,0,-1};
+		for(int i=0; i<4; i++){
+			if(board.getPiece(x2+dx[i], y2+dy[i])!=null &&
+				board.getPiece(x2+dx[i], y2+dy[i]).getKilled(
+					board.getPiece(x2, y2),
+					board.getPiece(x2+dx[i]*2, y2+dy[i]*2),
+					board.getPiece(x2+dx[i]+dy[i], y2+dy[i]+dx[i]),
+					board.getPiece(x2+dx[i]-dy[i], y2+dy[i]-dx[i]))){
+				board.removePiece(x2+dx[i],y2+dy[i]);
+				//Aca se puede agregar algo para contabilizar las fichas atrapadas
+			}
+		}
+
+	}
+	
 	//Aca es donde deberia pasar la magia :P
-	public boolean move(int x1, int y1, int x2, int y2){
+	public boolean canMove(int x1, int y1, int x2, int y2){
 		Piece pieceToMove=board.getPiece(x1, y1);
 		if(board.getPiece(x2, y2).canStepBy(pieceToMove)){
 			if((x1!=x2 || y1!=y2) && (x1==x2 || y1==y2)){
 				if(checkEmptyPath(pieceToMove,x1,y1,x2-x1,y2-y1)){
-					board.move(x1,y1,x2,y2);
-					int dx[]={1,0,-1,0};
-					int dy[]={0,1,0,-1};
-					for(int i=0; i<4; i++){
-						if(board.getPiece(x2+dx[i], y2+dy[i])!=null &&
-							board.getPiece(x2+dx[i], y2+dy[i]).getKilled(pieceToMove,
-								board.getPiece(x2+dx[i]*2, y2+dy[i]*2),
-								board.getPiece(x2+dx[i]+dy[i], y2+dy[i]+dx[i]),
-								board.getPiece(x2+dx[i]-dy[i], y2+dy[i]-dx[i]))){
-							board.removePiece(x2+dx[i],y2+dy[i]);
-							//Aca se puede agregar algo para contabilizar las fichas atrapadas
-						}
-					}
 					return true;
 				}
 			}

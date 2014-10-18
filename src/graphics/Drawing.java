@@ -11,12 +11,14 @@ import javax.swing.JPanel;
 
 import clases.Board;
 
-/**
- * @author Diego
- * 
- */
+
 public class Drawing extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private VisualGame game;
 	private ClickManager clickManager;
 	private static int squareSize=40;

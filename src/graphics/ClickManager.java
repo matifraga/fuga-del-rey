@@ -29,7 +29,8 @@ public class ClickManager {
 				drawing.repaint();
 				return;
 			}
-			if (game.move(squareClicked.x,squareClicked.y,i,j)){
+			if (game.canMove(squareClicked.x,squareClicked.y,i,j)){
+				game.move(squareClicked.x, squareClicked.y, i, j);
 				squareClicked=null;
 				drawing.repaint();
 				game.update();
