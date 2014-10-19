@@ -6,6 +6,7 @@ import java.io.FileReader;
 
 import Pieces.Piece;
 import clases.Board;
+import clases.Move;
 
 public class Game {
 
@@ -28,6 +29,10 @@ public class Game {
 		board.putTowersAndThrone();		
 	}
 	
+	public void move(Move move){
+		move(move.getX1(),move.getY1(),move.getX2(),move.getY2());
+	}
+	
 	public void move(int x1, int y1, int x2, int y2){
 		board.move(x1,y1,x2,y2);
 		int dx[]={1,0,-1,0};
@@ -44,6 +49,10 @@ public class Game {
 			}
 		}
 
+	}
+	
+	public boolean canMove(Move move){
+		return canMove(move.getX1(), move.getY1(), move.getX2(), move.getY2());
 	}
 	
 	//Aca es donde deberia pasar la magia :P
@@ -94,5 +103,12 @@ public class Game {
 	
 	public Board getBoard() {
 		return board;
+	}
+	
+	public Game copy(){
+		Game game=new Game();
+		game.board=this.board.copy();
+		game.turn=this.turn;
+		return game;
 	}
 }

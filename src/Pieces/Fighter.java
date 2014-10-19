@@ -30,4 +30,9 @@ public class Fighter extends Piece{
 		return 0;
 	}
 
+	@Override
+	public Piece copy() {
+		return new Fighter(owner);
+	}
+
 }

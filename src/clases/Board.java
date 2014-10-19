@@ -91,4 +91,14 @@ public class Board {
 	public void removePiece(int x1, int y1) {
 		board[x1][y1]=(x1==size/2 && y1==size/2)?getThrone():new Empty();
 	};
+	
+	public Board copy(){
+		Board board=new Board(this.size);
+		for(int i=0; i<this.size; i++){
+			for(int j=0; j<this.size; j++){
+				board.board[i][j]=this.board[i][j].copy();
+			}
+		}
+		return board;
+	}
 }

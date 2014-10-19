@@ -37,4 +37,11 @@ public class VisualGame extends Game {
 			//Aca va el minimax
 		}
 	}
+	
+	public VisualGame copy(){
+		VisualGame game=new VisualGame();
+		game.board=this.board.copy();
+		game.turn=this.turn;
+		return game;
+	}
 }
