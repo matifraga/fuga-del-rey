@@ -2,7 +2,9 @@ package Pieces;
 
 public class Fighter extends Piece{
 
-	public Fighter(int owner){
+	
+	
+	protected Fighter(int owner){
 		this.owner=owner;
 		this.name=owner==2?"Enemy":"Guard";
 	}
@@ -34,5 +36,5 @@ public class Fighter extends Piece{
 	public Piece copy() {
 		return new Fighter(owner);
 	}
-
+	
 }

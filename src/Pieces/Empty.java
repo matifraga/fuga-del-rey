@@ -2,7 +2,9 @@ package Pieces;
 
 public class Empty extends Piece {
 
-	public Empty(){
+	
+	
+	protected Empty(){
 		this.name="Empty";
 		this.owner=3;
 	}

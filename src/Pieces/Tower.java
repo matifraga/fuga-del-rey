@@ -2,7 +2,7 @@ package Pieces;
 
 public class Tower extends Piece {
 
-	public Tower(){
+	protected Tower(){
 		this.name="Tower";
 		this.owner=0; //ALL ENEMY
 	}

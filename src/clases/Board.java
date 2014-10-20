@@ -5,6 +5,7 @@ import Pieces.Empty;
 import Pieces.Fighter;
 import Pieces.King;
 import Pieces.Piece;
+import Pieces.PieceManager;
 import Pieces.SmallThrone;
 import Pieces.Throne;
 import Pieces.Tower;
@@ -33,16 +34,16 @@ public class Board {
 		for(int i=0;i<length;i++){
 			switch (str.charAt(i)) {
 			case '0':
-				piece= new Empty();
+				piece= PieceManager.getEmptyInstance();
 				break;
 			case 'N':
-				piece= new Fighter(2);
+				piece= PieceManager.getEnemyInstance();
 				break;
 			case 'G':
-				piece= new Fighter(1);
+				piece= PieceManager.getGuardInstance();
 				break;
 			case 'R':
-				piece= new King();
+				piece= PieceManager.getKingInstance();
 				break;
 			default:
 				throw new IllegalArgumentException();
@@ -62,13 +63,12 @@ public class Board {
 	
 	private void putTower(int i, int j) {
 		if(board[i][j].getName().equals("Empty"))
-			board[i][j]=new Tower();		
+			board[i][j]=PieceManager.getTowerInstance();		
 	}
 	
 	private void putThrone(int i, int j) {
-		if(board[i][j].getName().equals("Empty"))
+		if(board[i][j]==PieceManager.getEmptyInstance())
 			board[i][j]=getThrone();
-		
 	}
 
 	
@@ -80,7 +80,7 @@ public class Board {
 	public int value(){return 0;}
 
 	public Throne getThrone(){
-		return (size<12?new SmallThrone():new BigThrone());
+		return (size<12?PieceManager.getSmallThroneInstance():PieceManager.getBigThroneInstance());
 	}
 	
 	public void move(int x1, int y1, int x2, int y2) {
@@ -89,7 +89,7 @@ public class Board {
 	}
 
 	public void removePiece(int x1, int y1) {
-		board[x1][y1]=(x1==size/2 && y1==size/2)?getThrone():new Empty();
+		board[x1][y1]=(x1==size/2 && y1==size/2)?getThrone():PieceManager.getEmptyInstance();
 	};
 	
 	public Board copy(){

@@ -38,7 +38,7 @@ public class Drawing extends JPanel {
 						squareSize, squareSize);
 				//Tenemos que ver que hacemos con el Empty.png
 				g2d.drawImage(
-						Toolkit.getDefaultToolkit().getImage("Images/" + board.getPiece(i, j).getName()+ ".png"),
+						Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
 						squareSize * (1 + j),squareSize * (1 + i), this);
 			}
 		}
@@ -48,7 +48,7 @@ public class Drawing extends JPanel {
 			int j=clickManager.getSquareClicked().y;
 			g2d.fillRect((j+1)*squareSize, (i+1)*squareSize, squareSize, squareSize);
 			g2d.drawImage(
-			Toolkit.getDefaultToolkit().getImage("Images/" + board.getPiece(i, j).getName()+ ".png"),
+			Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
 			squareSize * (1 + j),squareSize * (1 + i), this);
 		}
 	}

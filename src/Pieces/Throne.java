@@ -2,7 +2,7 @@ package Pieces;
 
 public abstract class Throne extends Piece{
 
-	public Throne(){
+	protected Throne(){
 		this.name="Throne";
 		this.owner=5;
 	}
@@ -26,5 +26,4 @@ public abstract class Throne extends Piece{
 	public int value() {
 		return 0;
 	}
-
 }

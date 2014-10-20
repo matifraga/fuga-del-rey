@@ -1,8 +1,8 @@
 package Pieces;
 
 public class King extends Piece {
-
-	public King(){
+	
+	protected King(){
 		this.name="King";
 		this.owner=1;
 	}
@@ -36,8 +36,6 @@ public class King extends Piece {
 		if(ans>=2)
 			return true;
 		return false;
-		
-		
 	}
 
 	@Override
@@ -59,5 +57,6 @@ public class King extends Piece {
 	public Piece copy() {
 		return new King();
 	}
+	
 
 }
