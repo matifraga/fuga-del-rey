@@ -18,8 +18,8 @@ public class Board {
 	public Board(int n){
 		if(n<7 || n>19 || n%2==0)
 			throw new IllegalArgumentException();
-		size=n;
-		board= new Piece[n][n];
+		this.size=n;
+		this.board= new Piece[n][n];
 	}
 	
 	public Piece getPiece(int i,int j){
@@ -62,12 +62,12 @@ public class Board {
 	}
 	
 	private void putTower(int i, int j) {
-		if(board[i][j].getName().equals("Empty"))
+		if(board[i][j].getName().equals("Empty")) //porque el checkeo?
 			board[i][j]=PieceManager.getTowerInstance();		
 	}
 	
 	private void putThrone(int i, int j) {
-		if(board[i][j]==PieceManager.getEmptyInstance())
+		if(board[i][j]==PieceManager.getEmptyInstance()) // porque el checkeo?
 			board[i][j]=getThrone();
 	}
 
@@ -84,8 +84,8 @@ public class Board {
 	}
 	
 	public void move(int x1, int y1, int x2, int y2) {
-		board[x2][y2]=board[x1][y1];
-		removePiece(x1, y1);
+		board[x2][y2]=board[x1][y1]; //validar
+		removePiece(x1, y1); 
 	}
 
 	public void removePiece(int x1, int y1) {

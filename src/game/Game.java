@@ -14,9 +14,11 @@ public class Game {
 	protected int turn;
 	
 	public void loadBoardFrom(File file) throws Exception{
-		FileReader fr= new FileReader(file);
+		FileReader fr= new FileReader(file); //try-catch
 		BufferedReader br = new BufferedReader(fr);
 		String str=br.readLine(); //Aca se lee de quien es el turno
+		
+		//validaciones de tablero
 		turn=Integer.parseInt(str);
 		str=br.readLine();
 		int size=str.length();
@@ -33,7 +35,7 @@ public class Game {
 		move(move.getX1(),move.getY1(),move.getX2(),move.getY2());
 	}
 	
-	public void move(int x1, int y1, int x2, int y2){
+	public void move(int x1, int y1, int x2, int y2){ //private?
 		board.move(x1,y1,x2,y2);
 		int dx[]={1,0,-1,0};
 		int dy[]={0,1,0,-1};
@@ -56,7 +58,7 @@ public class Game {
 	}
 	
 	//Aca es donde deberia pasar la magia :P
-	public boolean canMove(int x1, int y1, int x2, int y2){
+	public boolean canMove(int x1, int y1, int x2, int y2){ //private?
 		Piece pieceToMove=board.getPiece(x1, y1);
 		if(board.getPiece(x2, y2).canStepBy(pieceToMove)){
 			if((x1!=x2 || y1!=y2) && (x1==x2 || y1==y2)){
@@ -91,6 +93,8 @@ public class Game {
 			turn=4; //No es el turno de nadie
 		}
 		//Tenemos que resolver como contabilizar la muerte del rey, si recorremos todo el tablero buscando el rey, o cuando lo matamos modificamos algun flag.
+		
+		//rta:rey puede tener un estado (puede quedar fashon si usamos el patron state) 
 	}
 	
 	public int getTurn(){
@@ -105,7 +109,7 @@ public class Game {
 		return board;
 	}
 	
-	public Game copy(){
+	public Game copy(){ 
 		Game game=new Game();
 		game.board=this.board.copy();
 		game.turn=this.turn;
