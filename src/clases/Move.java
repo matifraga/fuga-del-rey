@@ -2,13 +2,27 @@ package clases;
 
 public class Move {
 
-	private int x1,x2,y1,y2;
+	private int x1,x2,y1,y2,value;
+	
+	public Move(){};
+	
+	public Move(int value){
+		this.value=value;
+	}
 	
 	public Move(int x1, int y1, int x2, int y2){
 		this.x1=x1;
 		this.y1=y1;
 		this.x2=x2;
 		this.y2=y2;
+	}
+	
+	public Move(int x1, int y1, int x2, int y2,int value){
+		this.x1=x1;
+		this.y1=y1;
+		this.x2=x2;
+		this.y2=y2;
+		this.value=value;
 	}
 
 	public int getX1() {
@@ -27,5 +41,12 @@ public class Move {
 		return y2;
 	}
 	
+	public int getValue() {
+		return value;
+	}
+	
+	public void setValue(int value) {
+		this.value = value;
+	}
 	
 }

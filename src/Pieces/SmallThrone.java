@@ -11,10 +11,5 @@ public class SmallThrone extends Throne {
 		return true;
 	}
 
-	@Override
-	public Piece copy() {
-		return new SmallThrone();
-	}
-
 	
 }

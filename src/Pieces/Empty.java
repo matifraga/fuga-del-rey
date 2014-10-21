@@ -28,9 +28,6 @@ public class Empty extends Piece {
 	public int value() {
 		return 0;
 	}
-	@Override
-	public Piece copy() {
-		return new Empty();
-	}
+	
 
 }

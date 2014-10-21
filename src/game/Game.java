@@ -111,4 +111,8 @@ public class Game {
 		game.turn=this.turn;
 		return game;
 	}
+	
+	public int value(){
+		return (2*turn-3)*board.value();
+	}
 }

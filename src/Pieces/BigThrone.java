@@ -13,9 +13,5 @@ public class BigThrone extends Throne{
 		return true;
 	}
 
-	@Override
-	public Piece copy() {
-		return new BigThrone();
-	}
 
 }

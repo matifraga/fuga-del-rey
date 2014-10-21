@@ -53,10 +53,6 @@ public class King extends Piece {
 		return 0;
 	}
 
-	@Override
-	public Piece copy() {
-		return new King();
-	}
 	
 
 }

@@ -25,7 +25,6 @@ public class PieceManager {
 	public static Empty getEmptyInstance(){
 		return emptyInstance;
 	}
-	
 
 	public static Fighter getGuardInstance(){
 		return guardInstance;

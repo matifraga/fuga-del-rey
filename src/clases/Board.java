@@ -1,14 +1,8 @@
 package clases;
 
-import Pieces.BigThrone;
-import Pieces.Empty;
-import Pieces.Fighter;
-import Pieces.King;
 import Pieces.Piece;
 import Pieces.PieceManager;
-import Pieces.SmallThrone;
 import Pieces.Throne;
-import Pieces.Tower;
 
 public class Board {
 
@@ -77,7 +71,37 @@ public class Board {
 		return size;
 	}
 
-	public int value(){return 0;}
+	public int value(){
+		int answer=0;
+		boolean kingIsAlive=false;
+		Piece piece;
+		for(int i=0; i<size;i++){
+			for(int j=0; j<size; j++){
+				if((piece=getPiece(i, j)).getOwner()==1){
+					if(piece==PieceManager.getKingInstance()){
+						kingIsAlive=true;
+						if( (i==0 && j==0) ||
+							(i==0 && j==size-1) ||
+							(i==size-1 && j==0) ||
+							(i==size-1 && j==size-1)){
+							return Integer.MAX_VALUE;
+						}
+						answer+=(i-size/2)*(i-size/2)+(j-size/2)*(j-size/2);
+						/*if(i==0 || i==size-1 || j==0 || j==size-1)
+							answer+=10;*/
+					}						
+					answer++;
+				}
+				if(getPiece(i, j).getOwner()==2){
+					answer--;
+				}
+			}
+		}
+		if(kingIsAlive)
+			return answer;
+		return Integer.MIN_VALUE+1;
+		
+	}
 
 	public Throne getThrone(){
 		return (size<12?PieceManager.getSmallThroneInstance():PieceManager.getBigThroneInstance());
@@ -96,7 +120,7 @@ public class Board {
 		Board board=new Board(this.size);
 		for(int i=0; i<this.size; i++){
 			for(int j=0; j<this.size; j++){
-				board.board[i][j]=this.board[i][j].copy();
+				board.board[i][j]=this.board[i][j];
 			}
 		}
 		return board;

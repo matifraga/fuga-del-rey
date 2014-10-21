@@ -17,6 +17,4 @@ public abstract class Piece {
 	public int getOwner(){
 		return owner;
 	}
-	
-	abstract public Piece copy();
 }
