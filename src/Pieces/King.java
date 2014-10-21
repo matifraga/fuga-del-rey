@@ -33,6 +33,11 @@ public class King extends Piece {
 				return false;
 			ans+=1-(attacker4.owner&owner);
 		}
+		
+		//int ans=(attacker2!=null || attacker2.owner==3)?-10:(1-(attacker2.owner&owner)) +
+		//		  (attacker3!=null || attacker3.owner==3)?-10:(1-(attacker3.owner&owner)) +
+		//		  (attacker4!=null || attacker4.owner==3)?-10:(1-(attacker4.owner&owner));
+		
 		if(ans>=2)
 			return true;
 		return false;
