@@ -7,8 +7,7 @@ public abstract class Throne extends Piece{
 		this.owner=5;
 	}
 	@Override
-	public boolean getKilled(Piece attacker1, Piece attacker2, Piece attacker3,
-			Piece attacker4) {
+	public boolean canGetKilled(Piece attacker, Piece oppositePartner, Piece sideAttacker1, Piece sideAttacker2) {
 		return false;
 	}
 

@@ -36,7 +36,7 @@ public class Drawing extends JPanel {
 					g2d.setColor(Color.GRAY);
 				g2d.fillRect(squareSize * (1 + j), squareSize * (1 + i),
 						squareSize, squareSize);
-				//Tenemos que ver que hacemos con el Empty.png
+				//TODO: Tenemos que ver que hacemos con el Empty.png
 				g2d.drawImage(
 						Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
 						squareSize * (1 + j),squareSize * (1 + i), this);

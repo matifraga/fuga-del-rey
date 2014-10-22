@@ -10,9 +10,8 @@ public class Fighter extends Piece{
 	}
 	
 	@Override
-	public boolean getKilled(Piece attacker1, Piece attacker2, Piece attacker3,
-			Piece attacker4) {
-		if(attacker2!=null && attacker1.owner!=this.owner && (attacker2.owner&owner)==0)
+	public boolean canGetKilled(Piece attacker, Piece oppositePartner, Piece sideAttacker1, Piece sideAttacker2) {
+		if(oppositePartner!=null && attacker.owner!=this.owner && (oppositePartner.owner&owner)==0)
 			return true;		
 		return false;
 	}

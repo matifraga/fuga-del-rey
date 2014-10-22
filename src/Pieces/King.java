@@ -8,30 +8,30 @@ public class King extends Piece {
 	}
 	
 	@Override
-	public boolean getKilled(Piece attacker1, Piece attacker2, Piece attacker3,
-			Piece attacker4) {
-		if(attacker1.owner==owner)
+	public boolean canGetKilled(Piece attacker, Piece oppositePartner, Piece sideAttacker1, Piece sideAttacker2) {
+		if(attacker.owner==owner)
 			return false;
+		//TODO: INFORME
 		// throne    101
 		// empty      11
 		// enemy      10
 		// guard king 01
-		// castel     00
+		// castle     00
 		int ans=0;
-		if (attacker2!=null) {
-			if(attacker2.owner==3)
+		if (oppositePartner!=null) {
+			if(oppositePartner.owner==3)
 				return false;
-			ans+=1-(attacker2.owner&owner);
+			ans+=1-(oppositePartner.owner&owner);
 		}
-		if (attacker3!=null){
-			if(attacker3.owner==3)
+		if (sideAttacker1!=null){
+			if(sideAttacker1.owner==3)
 				return false;
-			ans+=1-(attacker3.owner&owner);
+			ans+=1-(sideAttacker1.owner&owner);
 		}
-		if (attacker4!=null){
-			if(attacker4.owner==3)
+		if (sideAttacker2!=null){
+			if(sideAttacker2.owner==3)
 				return false;
-			ans+=1-(attacker4.owner&owner);
+			ans+=1-(sideAttacker2.owner&owner);
 		}
 		
 		//int ans=(attacker2!=null || attacker2.owner==3)?-10:(1-(attacker2.owner&owner)) +

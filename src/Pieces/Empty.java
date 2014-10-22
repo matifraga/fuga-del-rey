@@ -2,15 +2,12 @@ package Pieces;
 
 public class Empty extends Piece {
 
-	
-	
 	protected Empty(){
 		this.name="Empty";
 		this.owner=3;
 	}
 	@Override
-	public boolean getKilled(Piece attacker1, Piece attacker2, Piece attacker3,
-			Piece attacker4) {		
+	public boolean canGetKilled(Piece attacker, Piece oppositePartner, Piece sideAttacker1, Piece sideAttacker2) {		
 		return false;
 	}
 

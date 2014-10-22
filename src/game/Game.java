@@ -32,7 +32,7 @@ public class Game {
 		BufferedReader br = new BufferedReader(fr);
 		String str=br.readLine(); //Aca se lee de quien es el turno
 		
-		//validaciones de tablero
+		//TODO: validaciones de tablero
 		turn=3-Integer.parseInt(str);
 		str=br.readLine();
 		int size=str.length();
@@ -56,7 +56,7 @@ public class Game {
 		int dy[]={0,1,0,-1};
 		for(int i=0; i<4; i++){
 			if(board.getPiece(x2+dx[i], y2+dy[i])!=null &&
-				board.getPiece(x2+dx[i], y2+dy[i]).getKilled(
+				board.getPiece(x2+dx[i], y2+dy[i]).canGetKilled(
 					board.getPiece(x2, y2),
 					board.getPiece(x2+dx[i]*2, y2+dy[i]*2),
 					board.getPiece(x2+dx[i]+dy[i], y2+dy[i]+dx[i]),
@@ -65,7 +65,7 @@ public class Game {
 					isKingAlive=false;
 				}
 				board.removePiece(x2+dx[i],y2+dy[i]);
-				//Aca se puede agregar algo para contabilizar las fichas atrapadas
+				//TODO: Aca se puede agregar algo para contabilizar las fichas atrapadas
 			}
 		}
 		isFinished();
@@ -76,7 +76,7 @@ public class Game {
 	}
 	
 	//Aca es donde deberia pasar la magia :P
-	public boolean canMove(int x1, int y1, int x2, int y2){ //private?
+	public boolean canMove(int x1, int y1, int x2, int y2){ 
 		Piece pieceToMove=board.getPiece(x1, y1);
 		if(board.getPiece(x2, y2).canStepBy(pieceToMove)){
 			if((x1!=x2 || y1!=y2) && (x1==x2 || y1==y2)){
@@ -113,10 +113,11 @@ public class Game {
 			return turn>2;
 	}
 	
-	//Esto se deberia ejecutar despues de cada movimiento
+	//Esto se deberia ejecutar despues de cada movimiento -- no conviene meterlo adentro de move? o afuera lo usamos en alguna 
+	//														 parte? como con changeTurn
 
-	//Tenemos que resolver como contabilizar la muerte del rey, si recorremos todo el tablero buscando el rey, o cuando lo matamos modificamos algun flag.
-	//rta:rey puede tener un estado (pied quedar fashon si usamos el patron state)
+	//TODO: Tenemos que resolver como contabilizar la muerte del rey, si recorremos todo el tablero buscando el rey,
+	//o cuando lo matamos modificamos algun flag. <-- mati vota flag
 	
 	public void update(){
 		if(isFinished()){
