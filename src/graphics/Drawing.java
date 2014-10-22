@@ -1,6 +1,6 @@
 package graphics;
 
-import game.VisualGame;
+import game.Game;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,7 +19,7 @@ public class Drawing extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private VisualGame game;
+	private Game game;
 	private ClickManager clickManager;
 	private static int squareSize=40;
 	
@@ -53,7 +53,7 @@ public class Drawing extends JPanel {
 		}
 	}
 
-	public void setGame(VisualGame game) {
+	public void setGame(Game game) {
 		this.game = game;
 	}
 

@@ -1,6 +1,8 @@
 package graphics;
 
-import game.VisualGame;
+
+
+import game.Game;
 
 import java.awt.Point;
 
@@ -8,7 +10,7 @@ import clases.Board;
 
 public class ClickManager {
 
-	private VisualGame game;
+	private Game game;
 	private Point squareClicked;
 	private Drawing drawing;
 	
@@ -48,7 +50,7 @@ public class ClickManager {
 		this.drawing=drawing;
 	}
 
-	public void setVisualGame(VisualGame vg){
-		this.game=vg;
+	public void setGame(Game game){
+		this.game=game;
 	}
 }

@@ -49,4 +49,7 @@ public class Move {
 		this.value = value;
 	}
 	
+	public String toString(){
+		return "("+x1+","+y1+")("+x2+","+y2+") "+value;
+	}
 }

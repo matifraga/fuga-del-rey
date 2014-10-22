@@ -5,7 +5,7 @@ import java.io.File;
 public class Main {
 
 	public static void main(String[] args) {
-		VisualGame game= new VisualGame();
+		Game game= new Game();
 		try {
 			game.loadBoardFrom(new File("example1"));
 		} catch (Exception e) {

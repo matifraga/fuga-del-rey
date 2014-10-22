@@ -86,9 +86,8 @@ public class Board {
 							(i==size-1 && j==size-1)){
 							return Integer.MAX_VALUE;
 						}
-						answer+=(i-size/2)*(i-size/2)+(j-size/2)*(j-size/2);
-						/*if(i==0 || i==size-1 || j==0 || j==size-1)
-							answer+=10;*/
+						answer+=((i-size/2)*(i-size/2)+(j-size/2)*(j-size/2))/(size/4);
+						
 					}						
 					answer++;
 				}
