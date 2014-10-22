@@ -7,6 +7,7 @@ import graphics.Drawing;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.lang.annotation.Documented;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -154,6 +155,7 @@ public class Game {
 		game.board=this.board.copy();
 		game.turn=this.turn;
 		game.isKingAlive=this.isKingAlive;
+		
 		return game;
 	}
 	
@@ -161,6 +163,11 @@ public class Game {
 	
 	
 	/*Esta medio feucho tenemos que ir mejorandolo*/
+	/**
+	 *  Devuelve el mejor movimiento posible y su valor heuristico
+	 *  
+	 *   @param game el estado del juego
+	 */
 	public Move minimaxByDepth(Game game,int depth){
 		if(depth==0 || game.getTurn()>2 /*Termino*/){
 			return new Move(game.value());
