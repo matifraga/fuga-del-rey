@@ -29,7 +29,7 @@ public class Game {
 	
 	
 	public void loadBoardFrom(File file) throws Exception{
-		FileReader fr= new FileReader(file); //try-catch
+		FileReader fr= new FileReader(file); //TODO: try-catch?
 		BufferedReader br = new BufferedReader(fr);
 		String str=br.readLine(); //Aca se lee de quien es el turno
 		
@@ -206,14 +206,18 @@ public class Game {
 	 *  asi que para no repetir codigo capaz podemos juntarlos a los dos y
 	 *   segun el valor de prune hacer la poda o no*/
 	
-	public Move minimaxByDepthWithPrune(Game game, int depth, int prune){
+	//ahi lo hice generico, para con/sin poda, dejo el otro por si las moscas
+	
+	public Move minimaxByDepthWithPrune(Game game, int depth, Integer prune){
 		if(depth==0 || game.getTurn()>2 /*Termino*/){
 			return new Move(game.value());
 		}
 		Move answer=new Move(Integer.MIN_VALUE);
 		Board board=game.getBoard();
 		List<Move> possibleMoves;
-		int actualPrune=Integer.MAX_VALUE;
+		Integer actualPrune=null;
+		if(prune!=null)
+			actualPrune=Integer.MAX_VALUE;
 		for(int i=0; i<board.getSize(); i++){
 			for(int j=0; j<board.getSize(); j++){
 				if(board.getPiece(i, j).getOwner()==game.getTurn()){
@@ -225,16 +229,18 @@ public class Game {
 						Move resp=minimaxByDepthWithPrune(gameAux,depth-1,actualPrune);
 						move.setValue(-resp.getValue());
 					//	System.out.println(blancos(4-depth)+"Sali: "+move);
-						if(move.getValue()>=prune)
-							return move;
-				
+						if(prune!=null){
+							if(move.getValue()>=prune)
+								return move;
+						}
 						if (move.getValue()>answer.getValue()){							
 							answer=move;
 							if(answer.getValue()==Integer.MAX_VALUE){
 								return answer;
 							}							
 						}
-						actualPrune=-answer.getValue();
+						if(prune!=null)
+							actualPrune=-answer.getValue();
 					}
 				}
 			}
