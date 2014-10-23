@@ -56,12 +56,12 @@ public class Board {
 	}
 	
 	private void putTower(int i, int j) {
-		if(board[i][j].getName().equals("Empty")) //porque el checkeo?
+		if(board[i][j].getName().equals("Empty")) //TODO: porque el checkeo?
 			board[i][j]=PieceManager.getTowerInstance();		
 	}
 	
 	private void putThrone(int i, int j) {
-		if(board[i][j]==PieceManager.getEmptyInstance()) // porque el checkeo?
+		if(board[i][j]==PieceManager.getEmptyInstance()) //TODO: porque el checkeo?
 			board[i][j]=getThrone();
 	}
 
@@ -86,7 +86,8 @@ public class Board {
 							(i==size-1 && j==size-1)){
 							return Integer.MAX_VALUE;
 						}
-						answer+=((i-size/2)*(i-size/2)+(j-size/2)*(j-size/2))*(20.0/size);
+						answer+=((i-size/2)*(i-size/2)+(j-size/2)*(j-size/2))*(20.0/size); //creo que habria que disminuir este 
+							  //numero, para que no se mande tan de una a bloquear al rey
 						
 					}						
 					answer+=16;
