@@ -86,7 +86,7 @@ public class Board {
 							(i==size-1 && j==size-1)){
 							return Integer.MAX_VALUE;
 						}
-						answer+=((i-size/2)*(i-size/2)+(j-size/2)*(j-size/2))/(size/4);
+						answer+=((i-size/2)*(i-size/2)+(j-size/2)*(j-size/2))*(20.0/size);
 						
 					}						
 					answer++;
@@ -98,7 +98,7 @@ public class Board {
 		}
 		if(kingIsAlive)
 			return answer;
-		return Integer.MIN_VALUE+1;
+		return (Integer.MIN_VALUE+1);
 		
 	}
 

@@ -8,7 +8,7 @@ public class BigThrone extends Throne{
 	
 	@Override
 	public boolean canJumpBy(Piece piece) {
-		if(piece.getName().equals("Guard"))
+		if(piece==PieceManager.getGuardInstance())
 			return false;
 		return true;
 	}

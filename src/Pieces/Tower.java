@@ -13,7 +13,7 @@ public class Tower extends Piece {
 
 	@Override
 	public boolean canStepBy(Piece piece) {
-		if(piece.getName().equals("King"))
+		if(piece==PieceManager.getKingInstance())
 			return true;
 		return false;
 	}

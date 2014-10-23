@@ -47,7 +47,7 @@ public class Game {
 	}
 	
 	public void move(Move move){
-		move(move.getX1(),move.getY1(),move.getX2(),move.getY2());
+		move(move.getXOrigin(),move.getYOrigin(),move.getXDest(),move.getYDest());
 	}
 	
 	public void move(int x1, int y1, int x2, int y2){ //private?
@@ -73,7 +73,7 @@ public class Game {
 	}
 	
 	public boolean canMove(Move move){
-		return canMove(move.getX1(), move.getY1(), move.getX2(), move.getY2());
+		return canMove(move.getXOrigin(), move.getYOrigin(), move.getXDest(), move.getYDest());
 	}
 	
 	//Aca es donde deberia pasar la magia :P
@@ -101,7 +101,13 @@ public class Game {
 		return true;
 	}
 
-	
+	/**
+	 *  Devuelve si el juego ha concluido o no.
+	 *  
+	 *  Si el juego termino, modifica la variable turn:
+	 *  turn=20 si ganaron los enemigos o turn=10 si ganaron los guardianes 
+	 * 
+	 */
 	public boolean isFinished(){
 		if(!isKingAlive)
 			turn=20; //Ganan los enemigos
@@ -114,11 +120,6 @@ public class Game {
 			return turn>2;
 	}
 	
-	//Esto se deberia ejecutar despues de cada movimiento -- no conviene meterlo adentro de move? o afuera lo usamos en alguna 
-	//														 parte? como con changeTurn
-
-	//TODO: Tenemos que resolver como contabilizar la muerte del rey, si recorremos todo el tablero buscando el rey,
-	//o cuando lo matamos modificamos algun flag. <-- mati vota flag
 	
 	public void update(){
 		if(isFinished()){
@@ -155,7 +156,6 @@ public class Game {
 		game.board=this.board.copy();
 		game.turn=this.turn;
 		game.isKingAlive=this.isKingAlive;
-		
 		return game;
 	}
 	
@@ -164,9 +164,10 @@ public class Game {
 	
 	/*Esta medio feucho tenemos que ir mejorandolo*/
 	/**
-	 *  Devuelve el mejor movimiento posible y su valor heuristico
+	 *  Devuelve el mejor movimiento posible y su valor heurístico
 	 *  
-	 *   @param game el estado del juego
+	 *   @param game El estado del juego
+	 *   @param depth Nivel de profundidad
 	 */
 	public Move minimaxByDepth(Game game,int depth){
 		if(depth==0 || game.getTurn()>2 /*Termino*/){
@@ -183,9 +184,9 @@ public class Game {
 					for (Move move : possibleMoves) {
 						Game gameAux= game.copy();
 						gameAux.move(move);
-				//		System.out.println(blancos(3-depth)+"Entre: "+move);
+					//	System.out.println(blancos(3-depth)+"Entre: "+move);
 						Move resp=minimaxByDepth(gameAux,depth-1);
-				//		System.out.println(blancos(3-depth)+"Sali: "+move+" con valor "+resp.getValue());
+					//	System.out.println(blancos(3-depth)+"Sali: "+move+" con valor "+resp.getValue());
 						if (resp.getValue()>maxAcum){							
 							answer=move;
 							maxAcum=resp.getValue();
