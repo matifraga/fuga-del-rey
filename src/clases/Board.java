@@ -89,10 +89,10 @@ public class Board {
 						answer+=((i-size/2)*(i-size/2)+(j-size/2)*(j-size/2))*(20.0/size);
 						
 					}						
-					answer++;
+					answer+=16;
 				}
 				if(getPiece(i, j).getOwner()==2){
-					answer--;
+					answer-=9;
 				}
 			}
 		}

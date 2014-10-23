@@ -130,8 +130,10 @@ public class Game {
 			}
 		}
 		if(turn==2){
-			Move move=minimaxByDepth(this,3);
+			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE);
 			move(move);			
+			System.out.println();
+			System.out.println();
 			update();
 		}
 		
@@ -164,7 +166,7 @@ public class Game {
 	
 	/*Esta medio feucho tenemos que ir mejorandolo*/
 	/**
-	 *  Devuelve el mejor movimiento posible y su valor heurístico
+	 *  Devuelve el mejor movimiento posible y su valor heuristico
 	 *  
 	 *   @param game El estado del juego
 	 *   @param depth Nivel de profundidad
@@ -173,10 +175,9 @@ public class Game {
 		if(depth==0 || game.getTurn()>2 /*Termino*/){
 			return new Move(game.value());
 		}
-		Move answer=new Move();
+		Move answer=new Move(Integer.MIN_VALUE);
 		Board board=game.getBoard();
 		List<Move> possibleMoves;
-		int maxAcum=Integer.MIN_VALUE;
 		for(int i=0; i<board.getSize(); i++){
 			for(int j=0; j<board.getSize(); j++){
 				if(board.getPiece(i, j).getOwner()==game.getTurn()){
@@ -184,23 +185,60 @@ public class Game {
 					for (Move move : possibleMoves) {
 						Game gameAux= game.copy();
 						gameAux.move(move);
-					//	System.out.println(blancos(3-depth)+"Entre: "+move);
+				//		System.out.println(blancos(3-depth)+"Entre: "+move);
 						Move resp=minimaxByDepth(gameAux,depth-1);
-					//	System.out.println(blancos(3-depth)+"Sali: "+move+" con valor "+resp.getValue());
-						if (resp.getValue()>maxAcum){							
+						move.setValue(-resp.getValue());
+				//		System.out.println(blancos(3-depth)+"Sali: "+move);
+						if (move.getValue()>answer.getValue()){							
 							answer=move;
-							maxAcum=resp.getValue();
-							if(maxAcum==Integer.MAX_VALUE){
-								answer.setValue(-maxAcum);
+							if(answer.getValue()==Integer.MAX_VALUE){
 								return answer;
-							}
-							
+							}							
 						}
 					}
 				}
 			}
 		}
-		answer.setValue(-maxAcum);
+		return answer;
+	}
+	
+	/*Aca esta el minimax con poda, no cambia mucho al comun,
+	 *  asi que para no repetir codigo capaz podemos juntarlos a los dos y
+	 *   segun el valor de prune hacer la poda o no*/
+	
+	public Move minimaxByDepthWithPrune(Game game, int depth, int prune){
+		if(depth==0 || game.getTurn()>2 /*Termino*/){
+			return new Move(game.value());
+		}
+		Move answer=new Move(Integer.MIN_VALUE);
+		Board board=game.getBoard();
+		List<Move> possibleMoves;
+		int actualPrune=Integer.MAX_VALUE;
+		for(int i=0; i<board.getSize(); i++){
+			for(int j=0; j<board.getSize(); j++){
+				if(board.getPiece(i, j).getOwner()==game.getTurn()){
+					possibleMoves=getPossibleMovesFrom(board,i,j);
+					for (Move move : possibleMoves) {
+						Game gameAux= game.copy();
+						gameAux.move(move);
+					//	System.out.println(blancos(4-depth)+"Entre: "+move);
+						Move resp=minimaxByDepthWithPrune(gameAux,depth-1,actualPrune);
+						move.setValue(-resp.getValue());
+					//	System.out.println(blancos(4-depth)+"Sali: "+move);
+						if(move.getValue()>=prune)
+							return move;
+				
+						if (move.getValue()>answer.getValue()){							
+							answer=move;
+							if(answer.getValue()==Integer.MAX_VALUE){
+								return answer;
+							}							
+						}
+						actualPrune=-answer.getValue();
+					}
+				}
+			}
+		}
 		return answer;
 	}
 	
@@ -260,13 +298,13 @@ public class Game {
 	public int value(){
 		switch (turn) {
 		case 1:
-			return -board.value();
-		case 2:
 			return board.value();
+		case 2:
+			return -board.value();
 		case 10:
-			return Integer.MAX_VALUE;
+			return Integer.MIN_VALUE+1;
 		case 20:
-			return Integer.MAX_VALUE;
+			return Integer.MIN_VALUE+1;
 		default:
 			throw new IllegalStateException();
 		}
