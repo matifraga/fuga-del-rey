@@ -27,13 +27,14 @@ public class Drawing extends JPanel {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
 		Board board = game.getBoard();
+		
 		for (int i = 0; i < board.getSize(); i++) {
 			for (int j = 0; j < board.getSize(); j++) {
 
 				if ((i + j) % 2 == 0)
-					g2d.setColor(Color.BLACK);
+					g2d.setColor(Color.LIGHT_GRAY);
 				else
-					g2d.setColor(Color.GRAY);
+					g2d.setColor(Color.WHITE);
 				g2d.fillRect(squareSize * (1 + j), squareSize * (1 + i),
 						squareSize, squareSize);
 				//TODO: Tenemos que ver que hacemos con el Empty.png
@@ -51,6 +52,8 @@ public class Drawing extends JPanel {
 			Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
 			squareSize * (1 + j),squareSize * (1 + i), this);
 		}
+		g2d.setColor(Color.black);
+		g2d.drawRect(40, 40, 40*board.getSize(), 40*board.getSize());
 	}
 
 	public void setGame(Game game) {
