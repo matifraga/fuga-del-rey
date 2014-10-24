@@ -24,19 +24,21 @@ public class ClickManager {
 			squareClicked=new Point(i,j);
 			drawing.repaint();
 			return;
-		}
-		if(squareClicked!=null){
-			if(squareClicked.x==i && squareClicked.y==j){
-				squareClicked=null;
-				drawing.repaint();
-				return;
-			}
-			if (game.canMove(squareClicked.x,squareClicked.y,i,j)){
-				game.move(squareClicked.x, squareClicked.y, i, j);
-				squareClicked=null;
-				drawing.repaint();
-				game.update();
-				return;
+		}else{
+			if(squareClicked!=null){
+				if(squareClicked.x==i && squareClicked.y==j){
+					squareClicked=null;
+					drawing.repaint();
+					return;
+				}else{
+					if (game.canMove(squareClicked.x,squareClicked.y,i,j)){
+						game.move(squareClicked.x, squareClicked.y, i, j);
+						squareClicked=null;
+						drawing.repaint();
+						game.update();
+						return;
+					}
+				}
 			}
 		}
 	}
