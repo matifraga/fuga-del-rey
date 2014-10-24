@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import treeCalls.Node;
 import Pieces.Piece;
 import Pieces.PieceManager;
 import clases.Board;
@@ -130,7 +131,9 @@ public class Game {
 			}
 		}
 		if(turn==2){
-			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE);
+			System.out.println("Crear archivo texto...");
+			Node start=new Node(new Move(),"START");
+			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE,start);
 			move(move);			
 			System.out.println();
 			System.out.println();
@@ -171,8 +174,8 @@ public class Game {
 	 *   @param game El estado del juego
 	 *   @param depth Nivel de profundidad
 	 */
-	public Move minimaxByDepth(Game game,int depth){
-		if(depth==0 || game.getTurn()>2 /*Termino*/){
+	/*public Move minimaxByDepth(Game game,int depth){
+		if(depth==0 || game.getTurn()>2 ){
 			return new Move(game.value());
 		}
 		Move answer=new Move(Integer.MIN_VALUE);
@@ -185,10 +188,10 @@ public class Game {
 					for (Move move : possibleMoves) {
 						Game gameAux= game.copy();
 						gameAux.move(move);
-				//		System.out.println(blancos(3-depth)+"Entre: "+move);
+						System.out.println(blancos(3-depth)+"Entre: "+move);
 						Move resp=minimaxByDepth(gameAux,depth-1);
 						move.setValue(-resp.getValue());
-				//		System.out.println(blancos(3-depth)+"Sali: "+move);
+					System.out.println(blancos(3-depth)+"Sali: "+move);
 						if (move.getValue()>answer.getValue()){							
 							answer=move;
 							if(answer.getValue()==Integer.MAX_VALUE){
@@ -201,6 +204,7 @@ public class Game {
 		}
 		return answer;
 	}
+	*/
 	
 	/*Aca esta el minimax con poda, no cambia mucho al comun,
 	 *  asi que para no repetir codigo capaz podemos juntarlos a los dos y
@@ -208,7 +212,7 @@ public class Game {
 	
 	//ahi lo hice generico, para con/sin poda, dejo el otro por si las moscas
 	
-	public Move minimaxByDepthWithPrune(Game game, int depth, Integer prune){
+	public Move minimaxByDepthWithPrune(Game game, int depth, Integer prune, Node me){
 		if(depth==0 || game.getTurn()>2 /*Termino*/){
 			return new Move(game.value());
 		}
@@ -216,6 +220,7 @@ public class Game {
 		Board board=game.getBoard();
 		List<Move> possibleMoves;
 		Integer actualPrune=null;
+		Node son=null;
 		if(prune!=null)
 			actualPrune=Integer.MAX_VALUE;
 		for(int i=0; i<board.getSize(); i++){
@@ -225,22 +230,32 @@ public class Game {
 					for (Move move : possibleMoves) {
 						Game gameAux= game.copy();
 						gameAux.move(move);
+						if(me!=null)
+							son=new Node(move,"nombre");
 					//	System.out.println(blancos(4-depth)+"Entre: "+move);
-						Move resp=minimaxByDepthWithPrune(gameAux,depth-1,actualPrune);
-						move.setValue(-resp.getValue());
+						Move resp=minimaxByDepthWithPrune(gameAux,depth-1,actualPrune,son);
+						move.setValue(-resp.getValue());								
 					//	System.out.println(blancos(4-depth)+"Sali: "+move);
-						if(prune!=null){
-							if(move.getValue()>=prune)
-								return move;
+						if(me!=null){
+							son.setMove(move);
+							son.write();
+							me.link(son);
 						}
+						
 						if (move.getValue()>answer.getValue()){							
 							answer=move;
 							if(answer.getValue()==Integer.MAX_VALUE){
 								return answer;
 							}							
 						}
-						if(prune!=null)
-							actualPrune=-answer.getValue();
+						if(prune!=null){
+							if(move.getValue()>=prune){
+								return answer;
+							}else{
+								actualPrune=-answer.getValue();
+							}
+						}
+							
 					}
 				}
 			}

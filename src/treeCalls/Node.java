@@ -7,15 +7,29 @@ public class Node {
 	private static String label;
 	private String name;
 	private Move move;
+	private String color;
+	private String form;
 	
 	public Node(Move move, String name){
 		this.move=move;
 	}
 	//[shape=box, label="D", fillcolor=red]; 
-	public void fillNode(int value, String color, String form){
-		System.out.println("[shape="+form+", label=\""+this.move.toString()+"\""+", fillcolor="+color);
+	public void write(){
+		System.out.println("[shape="+this.form+", label=\""+this.move.toString()+"\""+", fillcolor="+this.color);
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setMove(Move move) {
+		this.move = move;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public void setForm(String form) {
+		this.form = form;
+	}
 	public void setLabel(String label){
 		Node.label=label;
 	}
