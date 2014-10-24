@@ -7,7 +7,6 @@ import graphics.Drawing;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.lang.annotation.Documented;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import treeCalls.Node;
 import Pieces.Piece;
 import Pieces.PieceManager;
 import clases.Board;
-import clases.Move;
 
 public class Game {
 
@@ -48,7 +46,7 @@ public class Game {
 	}
 	
 	public void move(Move move){
-		move(move.getXOrigin(),move.getYOrigin(),move.getXDest(),move.getYDest());
+		move(move.xOrigin,move.yOrigin,move.xDest,move.yDest);
 	}
 	
 	public void move(int x1, int y1, int x2, int y2){ //private?
@@ -74,7 +72,7 @@ public class Game {
 	}
 	
 	public boolean canMove(Move move){
-		return canMove(move.getXOrigin(), move.getYOrigin(), move.getXDest(), move.getYDest());
+		return canMove(move.xOrigin, move.yOrigin, move.xDest, move.yDest);
 	}
 	
 	//Aca es donde deberia pasar la magia :P
@@ -131,20 +129,36 @@ public class Game {
 			}
 		}
 		if(turn==2){
-			System.out.println("Crear archivo texto...");
-			Node start=new Node(new Move(),"START");
-			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE,start);
-			System.out.println("Cerrar el archivo...");
+			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE,null);
 			move(move);			
-			System.out.println();
-			System.out.println();
 			update();
 		}
-		
 	}
 	
-	
-	
+	public void getNextBestMove(boolean tree){
+		Node start=null;
+		if(tree){
+			try {
+				Node.start();
+			} catch (Exception e) {
+				System.out.println("Hubo un error al abrir el tree.dot");
+			//	e.printStackTrace();
+			}
+			start=new Node();
+		}
+		Move move=minimaxByDepthWithPrune(this, 3, null, start);
+		System.out.println("El mejor moviemiento posible es: "+move.moveString());
+		if(tree){
+			start.setLabel("START "+move.getValue());
+			start.setColor("salmon");
+			try {
+				Node.close();
+			} catch (Exception e) {
+				System.out.println("Hubo un error al cerrar el tree.dot");
+			//	e.printStackTrace();
+			}
+		}
+	}
 	public int getTurn(){
 		return turn;
 	}
@@ -222,7 +236,7 @@ public class Game {
 		Board board=state.getBoard();
 		List<Move> possibleMoves;
 		Integer actualPrune=null;
-		Node son=null;
+		Node son=null,nodeAnswer=null;
 		if(prune!=null)
 			actualPrune=Integer.MAX_VALUE;
 		for(int i=0; i<board.getSize(); i++){
@@ -233,18 +247,24 @@ public class Game {
 						Game stateAux= state.copy();
 						stateAux.move(move);
 						if(me!=null)
-							son=new Node(move,"nombre");
+							son=new Node();
 					//	System.out.println(blancos(4-depth)+"Entre: "+move);
 						Move resp=minimaxByDepthWithPrune(stateAux,depth-1,actualPrune,son);
 						move.setValue(-resp.getValue());								
 					//	System.out.println(blancos(4-depth)+"Sali: "+move);
-						if(me!=null){
+						if(son!=null){
 							son.setMove(move);
-							son.write();
+							if(depth%2==0)
+								son.setForm("ellipse");
+							else
+								son.setForm("box");
 							me.link(son);
 						}
 						
 						if (move.getValue()>answer.getValue()){							
+							if(me!=null){
+								nodeAnswer=son;
+							}
 							answer=move;
 							if(answer.getValue()==Integer.MAX_VALUE){
 								return answer;
@@ -262,6 +282,7 @@ public class Game {
 				}
 			}
 		}
+		if(nodeAnswer!=null) nodeAnswer.setColor("salmon");
 		return answer;
 	}
 	

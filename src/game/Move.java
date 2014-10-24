@@ -1,8 +1,8 @@
-package clases;
+package game;
 
 public class Move {
 
-	private int xOrigin,xDest,yOrigin,yDest,value;
+	protected int xOrigin,xDest,yOrigin,yDest,value;
 	
 	public Move(){};
 	
@@ -24,26 +24,6 @@ public class Move {
 		this.yDest=y2;
 		this.value=value;
 	}
-
-	public int getXOrigin() {
-		return xOrigin;
-	}
-
-	public int getXDest() {
-		return xDest;
-	}
-
-	public int getYOrigin() {
-		return yOrigin;
-	}
-
-	public int getYDest() {
-		return yDest;
-	}
-	
-	public int getValue() {
-		return value;
-	}
 	
 	public void setValue(int value) {
 		this.value = value;
@@ -51,5 +31,13 @@ public class Move {
 	
 	public String toString(){
 		return "("+xOrigin+","+yOrigin+")("+xDest+","+yDest+") "+value;
+	}
+	
+	public int getValue(){
+		return value;
+	}
+	
+	public String moveString(){
+		return "("+xOrigin+","+yOrigin+")("+xDest+","+yDest+")";
 	}
 }

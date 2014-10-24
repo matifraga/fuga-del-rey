@@ -1,4 +1,6 @@
-package game;
+package main;
+
+import game.Game;
 
 import java.io.File;
 
