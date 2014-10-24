@@ -134,6 +134,7 @@ public class Game {
 			System.out.println("Crear archivo texto...");
 			Node start=new Node(new Move(),"START");
 			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE,start);
+			System.out.println("Cerrar el archivo...");
 			move(move);			
 			System.out.println();
 			System.out.println();
@@ -171,7 +172,7 @@ public class Game {
 	/**
 	 *  Devuelve el mejor movimiento posible y su valor heuristico
 	 *  
-	 *   @param game El estado del juego
+	 *   @param state El estado del juego
 	 *   @param depth Nivel de profundidad
 	 */
 	/*public Move minimaxByDepth(Game game,int depth){
@@ -211,13 +212,14 @@ public class Game {
 	 *   segun el valor de prune hacer la poda o no*/
 	
 	//ahi lo hice generico, para con/sin poda, dejo el otro por si las moscas
+	//con noditos tambien
 	
-	public Move minimaxByDepthWithPrune(Game game, int depth, Integer prune, Node me){
-		if(depth==0 || game.getTurn()>2 /*Termino*/){
-			return new Move(game.value());
+	public Move minimaxByDepthWithPrune(Game state, int depth, Integer prune, Node me){
+		if(depth==0 || state.getTurn()>2 /*Termino*/){
+			return new Move(state.value());
 		}
 		Move answer=new Move(Integer.MIN_VALUE);
-		Board board=game.getBoard();
+		Board board=state.getBoard();
 		List<Move> possibleMoves;
 		Integer actualPrune=null;
 		Node son=null;
@@ -225,15 +227,15 @@ public class Game {
 			actualPrune=Integer.MAX_VALUE;
 		for(int i=0; i<board.getSize(); i++){
 			for(int j=0; j<board.getSize(); j++){
-				if(board.getPiece(i, j).getOwner()==game.getTurn()){
+				if(board.getPiece(i, j).getOwner()==state.getTurn()){
 					possibleMoves=getPossibleMovesFrom(board,i,j);
 					for (Move move : possibleMoves) {
-						Game gameAux= game.copy();
-						gameAux.move(move);
+						Game stateAux= state.copy();
+						stateAux.move(move);
 						if(me!=null)
 							son=new Node(move,"nombre");
 					//	System.out.println(blancos(4-depth)+"Entre: "+move);
-						Move resp=minimaxByDepthWithPrune(gameAux,depth-1,actualPrune,son);
+						Move resp=minimaxByDepthWithPrune(stateAux,depth-1,actualPrune,son);
 						move.setValue(-resp.getValue());								
 					//	System.out.println(blancos(4-depth)+"Sali: "+move);
 						if(me!=null){
@@ -248,10 +250,10 @@ public class Game {
 								return answer;
 							}							
 						}
-						if(prune!=null){
-							if(move.getValue()>=prune){
-								return answer;
-							}else{
+						if(prune!=null){ //si en vez de un for each por los moves hago un for comun, lo que puedo hacer aca adentro 
+							if(move.getValue()>=prune){//es recorrer los nodos que me faltan antes de hacer el break y pintarlos
+								return answer;			//como nodos podados, para no gastar tanta memoria en todos los moves 
+							}else{						//haciendo el for each afuera
 								actualPrune=-answer.getValue();
 							}
 						}
