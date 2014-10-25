@@ -54,7 +54,7 @@ public class Node {
 	
 	public void setColor(String color) {
 		try{
-			bufferedWriter.write(name+" [colorfill=\""+color+"\"]\n");
+			bufferedWriter.write(name+" [style=filled, fillcolor=\""+color+"\"]\n");
 			}catch(Exception e){
 				System.out.println("Error al querer escribir el tree.dot");
 			}
