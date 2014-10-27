@@ -1,0 +1,13 @@
+<project name="TPE" default="Jar">  
+	<target name="Compile">
+		<mkdir dir="bin"/>
+		<javac srcdir="src" destdir="bin" />
+	</target>
+	<target name="Jar" depends="Compile">
+		<jar destfile="tpe.jar" basedir="bin">
+			<manifest> 
+				<attribute name="Main-Class" value="main.Main"/>   
+			</manifest> 
+		</jar>  
+	</target>
+</project>
