@@ -181,46 +181,6 @@ public class Game {
 	
 	
 	
-	
-	/*Esta medio feucho tenemos que ir mejorandolo*/
-	/**
-	 *  Devuelve el mejor movimiento posible y su valor heuristico
-	 *  
-	 *   @param state El estado del juego
-	 *   @param depth Nivel de profundidad
-	 */
-	/*public Move minimaxByDepth(Game game,int depth){
-		if(depth==0 || game.getTurn()>2 ){
-			return new Move(game.value());
-		}
-		Move answer=new Move(Integer.MIN_VALUE);
-		Board board=game.getBoard();
-		List<Move> possibleMoves;
-		for(int i=0; i<board.getSize(); i++){
-			for(int j=0; j<board.getSize(); j++){
-				if(board.getPiece(i, j).getOwner()==game.getTurn()){
-					possibleMoves=getPossibleMovesFrom(board,i,j);
-					for (Move move : possibleMoves) {
-						Game gameAux= game.copy();
-						gameAux.move(move);
-						System.out.println(blancos(3-depth)+"Entre: "+move);
-						Move resp=minimaxByDepth(gameAux,depth-1);
-						move.setValue(-resp.getValue());
-					System.out.println(blancos(3-depth)+"Sali: "+move);
-						if (move.getValue()>answer.getValue()){							
-							answer=move;
-							if(answer.getValue()==Integer.MAX_VALUE){
-								return answer;
-							}							
-						}
-					}
-				}
-			}
-		}
-		return answer;
-	}
-	*/
-	
 	/*Aca esta el minimax con poda, no cambia mucho al comun,
 	 *  asi que para no repetir codigo capaz podemos juntarlos a los dos y
 	 *   segun el valor de prune hacer la poda o no*/
@@ -229,7 +189,7 @@ public class Game {
 	//con noditos tambien
 	
 	public Move minimaxByDepthWithPrune(Game state, int depth, Integer prune, Node me){
-		if(depth==0 || state.getTurn()>2 /*Termino*/){
+		if(depth==0 || state.getTurn()>2){
 			return new Move(state.value());
 		}
 		Move answer=new Move(Integer.MIN_VALUE);
@@ -267,11 +227,13 @@ public class Game {
 							}
 							answer=move;
 							if(answer.getValue()==Integer.MAX_VALUE){
+								if(nodeAnswer!=null) nodeAnswer.setColor("salmon");
 								return answer;
 							}							
 						}
 						if(prune!=null){ //si en vez de un for each por los moves hago un for comun, lo que puedo hacer aca adentro 
 							if(move.getValue()>=prune){//es recorrer los nodos que me faltan antes de hacer el break y pintarlos
+								nodeAnswer.setColor("salmon");
 								return answer;			//como nodos podados, para no gastar tanta memoria en todos los moves 
 							}else{						//haciendo el for each afuera
 								actualPrune=-answer.getValue();
