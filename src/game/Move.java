@@ -3,7 +3,6 @@ package game;
 public class Move {
 
 	protected int xOrigin,xDest,yOrigin,yDest,value;
-	protected Long time=new Long(0);
 	
 	public Move(){};
 	
@@ -28,14 +27,6 @@ public class Move {
 	
 	public void setValue(int value) {
 		this.value = value;
-	}
-	
-	public void setTime(Long time) {
-		this.time=time;
-	}
-	
-	public Long getTime(){
-		return this.time;
 	}
 	
 	public String toString(){
