@@ -22,6 +22,9 @@ public class Game {
 	protected Board board;
 	protected int turn;
 	protected boolean isKingAlive=true;
+	protected Long time=new Long(5000L);//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
+	protected int depth=4; //entrada
+	protected Integer prune=Integer.MAX_VALUE; //null es sin poda, Integer.MAX_INT es con poda
 
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 1024;
@@ -124,41 +127,63 @@ public class Game {
 		if(isFinished()){
 			if(turn==10){
 				System.out.println("Los guardianes del Rey ganaron.");
-			}else{
+			}
+			if(turn==20){
 				System.out.println("Los enemigos del Rey ganaron.");
 			}
 		}
 		if(turn==2){
-			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE,null);
+			Move move=null;
+			if(time==null){
+				Game state=this.copy();
+				turn=15; //Para que el usuario no pueda ejecutar un movimiento
+				move=Minimax.minimax(state,depth,prune,null,Long.MAX_VALUE);
+				turn=2;
+			}else{
+				Game state=this.copy();
+				turn=15; //Para que el usuario no pueda ejecutar un movimiento
+				move=Minimax.minimaxByTime(state, time, prune,false);
+				turn=2;
+			}
 			move(move);			
 			update();
 		}
 	}
 	
 	public void getNextBestMove(boolean tree){
-		Node start=null;
-		if(tree){
-			try {
-				Node.start();
-			} catch (Exception e) {
-				System.out.println("Hubo un error al abrir el tree.dot");
-			//	e.printStackTrace();
+		Move move=null;
+		if(time==null){
+			Node start=null;
+			if(tree){
+				try {
+				Node.start("tree.dot");
+				} catch (Exception e) {
+					System.out.println("Hubo un error al abrir el tree.dot");
+				}
+				start=new Node();
 			}
-			start=new Node();
-		}
-		Move move=minimaxByDepthWithPrune(this, 3, null, start);
-		System.out.println("El mejor moviemiento posible es: "+move.moveString());
-		if(tree){
-			start.setLabel("START "+move.getValue());
-			start.setColor("salmon");
-			try {
-				Node.close();
-			} catch (Exception e) {
-				System.out.println("Hubo un error al cerrar el tree.dot");
-			//	e.printStackTrace();
+				move=Minimax.minimax(this,depth,prune,start,Long.MAX_VALUE);
+			if(tree){
+				start.setLabel("START "+move.getValue());
+				start.setColor("salmon");
+				try {
+					Node.close();
+				} catch (Exception e) {
+					System.out.println("Hubo un error al cerrar el tree.dot");
+				}
+			}
+		}else{
+			move=Minimax.minimaxByTime(this, time, prune, tree);
+			if(move==null){
+				this.turn=15; //Empate
+				System.out.println("No hay movimientos posibles");
 			}
 		}
+		System.out.println("El mejor movimiento posible es: "+move.moveString());
 	}
+
+
+
 	public int getTurn(){
 		return turn;
 	}
@@ -179,145 +204,6 @@ public class Game {
 		return game;
 	}
 	
-	
-	
-	
-	/*Esta medio feucho tenemos que ir mejorandolo*/
-	/**
-	 *  Devuelve el mejor movimiento posible y su valor heuristico
-	 *  
-	 *   @param state El estado del juego
-	 *   @param depth Nivel de profundidad
-	 */
-	/*public Move minimaxByDepth(Game game,int depth){
-		if(depth==0 || game.getTurn()>2 ){
-			return new Move(game.value());
-		}
-		Move answer=new Move(Integer.MIN_VALUE);
-		Board board=game.getBoard();
-		List<Move> possibleMoves;
-		for(int i=0; i<board.getSize(); i++){
-			for(int j=0; j<board.getSize(); j++){
-				if(board.getPiece(i, j).getOwner()==game.getTurn()){
-					possibleMoves=getPossibleMovesFrom(board,i,j);
-					for (Move move : possibleMoves) {
-						Game gameAux= game.copy();
-						gameAux.move(move);
-						System.out.println(blancos(3-depth)+"Entre: "+move);
-						Move resp=minimaxByDepth(gameAux,depth-1);
-						move.setValue(-resp.getValue());
-					System.out.println(blancos(3-depth)+"Sali: "+move);
-						if (move.getValue()>answer.getValue()){							
-							answer=move;
-							if(answer.getValue()==Integer.MAX_VALUE){
-								return answer;
-							}							
-						}
-					}
-				}
-			}
-		}
-		return answer;
-	}
-	*/
-	
-	/*Aca esta el minimax con poda, no cambia mucho al comun,
-	 *  asi que para no repetir codigo capaz podemos juntarlos a los dos y
-	 *   segun el valor de prune hacer la poda o no*/
-	
-	//ahi lo hice generico, para con/sin poda, dejo el otro por si las moscas
-	//con noditos tambien
-	
-	public Move minimaxByDepthWithPrune(Game state, int depth, Integer prune, Node me){
-		if(depth==0 || state.getTurn()>2 /*Termino*/){
-			return new Move(state.value());
-		}
-		Move answer=new Move(Integer.MIN_VALUE);
-		Board board=state.getBoard();
-		List<Move> possibleMoves;
-		Integer actualPrune=null;
-		Node son=null,nodeAnswer=null;
-		if(prune!=null)
-			actualPrune=Integer.MAX_VALUE;
-		for(int i=0; i<board.getSize(); i++){
-			for(int j=0; j<board.getSize(); j++){
-				if(board.getPiece(i, j).getOwner()==state.getTurn()){
-					possibleMoves=getPossibleMovesFrom(board,i,j);
-					for (Move move : possibleMoves) {
-						Game stateAux= state.copy();
-						stateAux.move(move);
-						if(me!=null)
-							son=new Node();
-					//	System.out.println(blancos(4-depth)+"Entre: "+move);
-						Move resp=minimaxByDepthWithPrune(stateAux,depth-1,actualPrune,son);
-						move.setValue(-resp.getValue());								
-					//	System.out.println(blancos(4-depth)+"Sali: "+move);
-						if(son!=null){
-							son.setMove(move);
-							if(depth%2==0)
-								son.setForm("ellipse");
-							else
-								son.setForm("box");
-							me.link(son);
-						}
-						
-						if (move.getValue()>answer.getValue()){							
-							if(me!=null){
-								nodeAnswer=son;
-							}
-							answer=move;
-							if(answer.getValue()==Integer.MAX_VALUE){
-								return answer;
-							}							
-						}
-						if(prune!=null){ //si en vez de un for each por los moves hago un for comun, lo que puedo hacer aca adentro 
-							if(move.getValue()>=prune){//es recorrer los nodos que me faltan antes de hacer el break y pintarlos
-								return answer;			//como nodos podados, para no gastar tanta memoria en todos los moves 
-							}else{						//haciendo el for each afuera
-								actualPrune=-answer.getValue();
-							}
-						}
-							
-					}
-				}
-			}
-		}
-		if(nodeAnswer!=null) nodeAnswer.setColor("salmon");
-		return answer;
-	}
-	
-	public List<Move> getPossibleMovesFrom(Board board ,int x, int y){
-		int dx[]={1,0,-1,0};
-		int dy[]={0,1,0,-1};
-		List<Move> answer=new LinkedList<Move>();
-		Piece piece;
-		Piece pieceToMove=board.getPiece(x, y);
-		for(int i=0;i<4;i++){
-			int dMove=1;
-			while((piece=board.getPiece(x+dx[i]*dMove, y+dy[i]*dMove))!=null 
-					&& piece.canJumpBy(pieceToMove)){
-
-				if(piece.canStepBy(pieceToMove)){
-					answer.add(new Move(x,y,x+dx[i]*dMove, y+dy[i]*dMove));
-				}
-				dMove++;
-			}
-
-			if(piece!=null && piece.canStepBy(pieceToMove)){
-				answer.add(new Move(x,y,x+dx[i]*dMove, y+dy[i]*dMove));
-			}
-		}
-		return answer;
-	}
-	
-	//para debugear
-	private String blancos(int a){
-		String b="";
-		for (int i = 0; i < a; i++) {
-			b+="\t";
-		}
-		return b;
-	}
 	
 	public void start(){
 		JFrame frame = new JFrame("Fuga Del Rey");

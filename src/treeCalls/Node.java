@@ -12,9 +12,15 @@ public class Node {
 	private static BufferedWriter bufferedWriter;
 	private String name;
 	
-	public static void start() throws Exception	{
-		bufferedWriter = new BufferedWriter(new FileWriter(new File("tree.dot")));
+	public static void start(String fileName) throws Exception	{
+		bufferedWriter = new BufferedWriter(new FileWriter(new File(fileName)));
 		bufferedWriter.write("digraph{\n");
+	}
+	
+	/*Tienen que estar cerrados los archivos*/
+	public static void rename(String toRename, String renameName){
+		File file=new File(toRename);
+		file.renameTo(new File(renameName));
 	}
 	
 	public static void close() throws Exception{
@@ -35,15 +41,6 @@ public class Node {
 	public void setName(String name) {
 		System.out.println();
 	}*/
-	
-	public void setMove(Move move) {
-		try{
-		bufferedWriter.write(name+" [label=\""+move+"\"]\n");
-		}catch(Exception e){
-			System.out.println("Error al querer escribir el tree.dot");
-		}
-	}
-	
 	public void setLabel(String str) {
 		try{
 		bufferedWriter.write(name+" [label=\""+str+"\"]\n");

@@ -15,7 +15,9 @@ public class Main {
 			//e.printStackTrace();
 			return;
 		}
-		game.start();
+		for (String string : args) {
+			System.out.println(string);
+		}
+		//game.start();
 	}
-
 }
