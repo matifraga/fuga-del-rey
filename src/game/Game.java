@@ -183,7 +183,6 @@ public class Game {
 	
 	
 	
-<<<<<<< HEAD
 	
 	/*Esta medio feucho tenemos que ir mejorandolo*/
 	/**
@@ -244,8 +243,6 @@ public class Game {
 		return move;
 	}
 	
-=======
->>>>>>> 711fc79477f6aa3f10799ab315cdafdfa0798dd4
 	/*Aca esta el minimax con poda, no cambia mucho al comun,
 	 *  asi que para no repetir codigo capaz podemos juntarlos a los dos y
 	 *   segun el valor de prune hacer la poda o no*/
@@ -253,15 +250,10 @@ public class Game {
 	//ahi lo hice generico, para con/sin poda, dejo el otro por si las moscas
 	//con noditos tambien
 	
-<<<<<<< HEAD
 	
 	//si bien el tiempo lo pasan en segundos, apenas lo parseamos en el main lo pasamos a milisegundos 
 	private Move miniMaxRecursive(Game state, Integer depth, Integer prune, Node me, Long timeLeft){ 
 		if(depth==0 || state.getTurn()>2 /*Termino*/){
-=======
-	public Move minimaxByDepthWithPrune(Game state, int depth, Integer prune, Node me){
-		if(depth==0 || state.getTurn()>2){
->>>>>>> 711fc79477f6aa3f10799ab315cdafdfa0798dd4
 			return new Move(state.value());
 		}
 		Move answer=new Move(Integer.MIN_VALUE);
@@ -318,13 +310,11 @@ public class Game {
 							}
 							answer=move;
 							if(answer.getValue()==Integer.MAX_VALUE){
-								if(nodeAnswer!=null) nodeAnswer.setColor("salmon");
 								return answer;
 							}							
 						}
 						if(prune!=null){ //si en vez de un for each por los moves hago un for comun, lo que puedo hacer aca adentro 
 							if(move.getValue()>=prune){//es recorrer los nodos que me faltan antes de hacer el break y pintarlos
-								nodeAnswer.setColor("salmon");
 								return answer;			//como nodos podados, para no gastar tanta memoria en todos los moves 
 							}else{						//haciendo el for each afuera
 								actualPrune=-answer.getValue();
