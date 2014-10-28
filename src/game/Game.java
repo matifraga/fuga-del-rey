@@ -21,6 +21,8 @@ public class Game {
 
 	protected Board board;
 	protected int turn;
+	protected Long time=new Long((long)4000);//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
+	protected int depth=4; //entrada 
 	protected boolean isKingAlive=true;
 
 	public static final int WIDTH = 1280;
@@ -49,7 +51,7 @@ public class Game {
 		move(move.xOrigin,move.yOrigin,move.xDest,move.yDest);
 	}
 	
-	public void move(int x1, int y1, int x2, int y2){ //private?
+	public void move(int x1, int y1, int x2, int y2){ 
 		board.move(x1,y1,x2,y2);
 		changeTurn();
 		int dx[]={1,0,-1,0};
@@ -129,7 +131,7 @@ public class Game {
 			}
 		}
 		if(turn==2){
-			Move move=minimaxByDepthWithPrune(this,4,Integer.MAX_VALUE,null);
+			Move move=miniMax(this,depth,Integer.MAX_VALUE,null, time);
 			move(move);			
 			update();
 		}
@@ -146,7 +148,7 @@ public class Game {
 			}
 			start=new Node();
 		}
-		Move move=minimaxByDepthWithPrune(this, 3, null, start);
+		Move move=miniMax(this, depth-1/*aca habia un 3 en vez de un 4*/, null, start, time);
 		System.out.println("El mejor moviemiento posible es: "+move.moveString());
 		if(tree){
 			start.setLabel("START "+move.getValue());
@@ -221,6 +223,26 @@ public class Game {
 	}
 	*/
 	
+	public Move miniMax(Game state, Integer depth, Integer prune, Node me, Long time){
+		Move move=null;
+		if(this.time==null){
+			move=miniMaxRecursive(this,depth,Integer.MAX_VALUE,null, null);
+		}else{
+			int auxDepth=1;
+			Long auxTime=time;
+			Move auxMove=null;
+			while(auxTime>0){ 
+				auxMove=miniMaxRecursive(this,auxDepth,(move==null)?Integer.MAX_VALUE:move.getValue(),null, auxTime);
+				if(move==null || auxMove.getValue()>move.getValue())
+					move=auxMove;
+				auxTime=auxMove.getTime();
+				System.out.println(auxDepth+" time: "+auxTime);
+				auxDepth++;
+			}
+		}
+		return move;
+	}
+	
 	/*Aca esta el minimax con poda, no cambia mucho al comun,
 	 *  asi que para no repetir codigo capaz podemos juntarlos a los dos y
 	 *   segun el valor de prune hacer la poda o no*/
@@ -228,7 +250,9 @@ public class Game {
 	//ahi lo hice generico, para con/sin poda, dejo el otro por si las moscas
 	//con noditos tambien
 	
-	public Move minimaxByDepthWithPrune(Game state, int depth, Integer prune, Node me){
+	
+	//si bien el tiempo lo pasan en segundos, apenas lo parseamos en el main lo pasamos a milisegundos 
+	private Move miniMaxRecursive(Game state, Integer depth, Integer prune, Node me, Long timeLeft){ 
 		if(depth==0 || state.getTurn()>2 /*Termino*/){
 			return new Move(state.value());
 		}
@@ -237,6 +261,10 @@ public class Game {
 		List<Move> possibleMoves;
 		Integer actualPrune=null;
 		Node son=null,nodeAnswer=null;
+		Long timeUsed=null;Long initial=new Long(System.currentTimeMillis());
+		if(timeLeft!=null){
+			timeUsed=new Long(0);
+		}
 		if(prune!=null)
 			actualPrune=Integer.MAX_VALUE;
 		for(int i=0; i<board.getSize(); i++){
@@ -244,14 +272,29 @@ public class Game {
 				if(board.getPiece(i, j).getOwner()==state.getTurn()){
 					possibleMoves=getPossibleMovesFrom(board,i,j);
 					for (Move move : possibleMoves) {
+						if(timeLeft!=null && timeLeft <0){
+							answer.setTime(timeLeft);
+							return answer;
+						}
+						
 						Game stateAux= state.copy();
 						stateAux.move(move);
 						if(me!=null)
 							son=new Node();
-					//	System.out.println(blancos(4-depth)+"Entre: "+move);
-						Move resp=minimaxByDepthWithPrune(stateAux,depth-1,actualPrune,son);
-						move.setValue(-resp.getValue());								
-					//	System.out.println(blancos(4-depth)+"Sali: "+move);
+						if(timeLeft!=null){
+							if(timeLeft <0){
+								answer.setTime(timeLeft);
+								return answer;
+							}else{
+								timeUsed= System.currentTimeMillis()-initial;
+							}
+						}
+						//System.out.println(blancos(4-depth)+"Entre: "+move);
+						Move resp=miniMaxRecursive(stateAux,depth-1,actualPrune,son,timeLeft-timeUsed);
+						move.setValue(-resp.getValue());	
+						timeUsed= System.currentTimeMillis()-initial;
+						move.setTime(timeLeft-(System.currentTimeMillis()-initial));
+						//System.out.println(blancos(4-depth)+"Sali: "+move);
 						if(son!=null){
 							son.setMove(move);
 							if(depth%2==0)
@@ -277,12 +320,16 @@ public class Game {
 								actualPrune=-answer.getValue();
 							}
 						}
-							
+						if(timeUsed!=null && timeUsed>=timeLeft){
+							answer.setTime(timeLeft-(System.currentTimeMillis()-initial));
+							return answer;
+						}
 					}
 				}
 			}
 		}
 		if(nodeAnswer!=null) nodeAnswer.setColor("salmon");
+		answer.setTime(timeLeft-(System.currentTimeMillis()-initial));
 		return answer;
 	}
 	
