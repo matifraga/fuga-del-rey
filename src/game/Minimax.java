@@ -1,5 +1,6 @@
 package game;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,10 +64,11 @@ public class Minimax {
 				move=auxMove;
 				//Renombro
 				Node.rename("treeAux.dot","tree.dot");
-				
 			}
 		}
-		//close
+		//elimino el treeAux
+		File closeFile = new File("treeAux.dot");
+		closeFile.delete();
 		System.out.println(timeBound-System.currentTimeMillis()+" "+depth);
 		return move;
 	}

@@ -26,7 +26,7 @@ public class Node {
 			file.renameTo(new File(renameName));
 		}
 	}
-	
+
 	public static void close() throws Exception{
 		bufferedWriter.write("}");
 		bufferedWriter.close();
