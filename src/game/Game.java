@@ -22,7 +22,7 @@ public class Game {
 	protected Board board;
 	protected int turn;
 	protected boolean isKingAlive=true;
-	protected Long time=new Long(5000L);//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
+	protected Long time=null;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
 	protected int depth=4; //entrada
 	protected Integer prune=Integer.MAX_VALUE; //null es sin poda, Integer.MAX_INT es con poda
 
@@ -162,7 +162,7 @@ public class Game {
 				}
 				start=new Node();
 			}
-				move=Minimax.minimax(this,depth,prune,start,Long.MAX_VALUE);
+			move=Minimax.minimax(this,depth,prune,start,Long.MAX_VALUE);
 			if(tree){
 				start.setLabel("START "+move.getValue());
 				start.setColor("salmon");
@@ -173,6 +173,7 @@ public class Game {
 				}
 			}
 		}else{
+			
 			move=Minimax.minimaxByTime(this, time, prune, tree);
 			if(move==null){
 				this.turn=15; //Empate

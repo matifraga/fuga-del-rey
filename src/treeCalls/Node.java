@@ -20,7 +20,11 @@ public class Node {
 	/*Tienen que estar cerrados los archivos*/
 	public static void rename(String toRename, String renameName){
 		File file=new File(toRename);
-		file.renameTo(new File(renameName));
+		File renameFile = new File(renameName);
+		if( ! file.renameTo(new File(renameName)) ) {
+			renameFile.delete();
+			file.renameTo(new File(renameName));
+		}
 	}
 	
 	public static void close() throws Exception{
