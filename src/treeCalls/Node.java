@@ -1,7 +1,5 @@
 package treeCalls;
 
-import game.Move;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,6 +28,7 @@ public class Node {
 	public static void close() throws Exception{
 		bufferedWriter.write("}");
 		bufferedWriter.close();
+		bufferedWriter=null;
 	}
 	
 	public Node(){

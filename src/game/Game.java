@@ -19,16 +19,21 @@ import clases.Board;
 
 public class Game {
 
-	protected Board board;
-	protected int turn;
-	protected boolean isKingAlive=true;
-	protected Long time=null;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
-	protected int depth=4; //entrada
-	protected Integer prune=Integer.MAX_VALUE; //null es sin poda, Integer.MAX_INT es con poda
-
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 1024;
+	private Board board;
+	private int turn;
+	private boolean isKingAlive=true;
+	private Long time=1000L;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
+	private int depth=4; //entrada
+	private Integer prune=Integer.MAX_VALUE; //null es sin poda, Integer.MAX_INT es con poda
+	private int humanTurn=1;
 	
+	public int getComputerTurn() {
+		return 3-humanTurn;
+	}
+	
+	public int getHumanTurn() {
+		return humanTurn;
+	}
 	
 	public void loadBoardFrom(File file) throws Exception{
 		FileReader fr= new FileReader(file); //TODO: try-catch?
@@ -92,7 +97,6 @@ public class Game {
 	}
 	
 	
-	
 	private boolean checkEmptyPath(Piece pieceToMove, int x1, int y1, int dirX,	int dirY) {
 		int uniX=dirX/(dirX==0?1:Math.abs(dirX));
 		int uniY=dirY/(dirY==0?1:Math.abs(dirY));
@@ -132,18 +136,12 @@ public class Game {
 				System.out.println("Los enemigos del Rey ganaron.");
 			}
 		}
-		if(turn==2){
+		if(turn==getComputerTurn()){
 			Move move=null;
 			if(time==null){
-				Game state=this.copy();
-				turn=15; //Para que el usuario no pueda ejecutar un movimiento
-				move=Minimax.minimax(state,depth,prune,null,Long.MAX_VALUE);
-				turn=2;
+				move=Minimax.minimax(this,depth,prune,null,Long.MAX_VALUE);
 			}else{
-				Game state=this.copy();
-				turn=15; //Para que el usuario no pueda ejecutar un movimiento
-				move=Minimax.minimaxByTime(state, time, prune,false);
-				turn=2;
+				move=Minimax.minimaxByTime(this, time, prune,false);
 			}
 			move(move);			
 			update();
@@ -175,10 +173,10 @@ public class Game {
 		}else{
 			
 			move=Minimax.minimaxByTime(this, time, prune, tree);
-			if(move==null){
-				this.turn=15; //Empate
-				System.out.println("No hay movimientos posibles");
-			}
+		}
+		if(move==null ){
+			this.turn=15; //Empate
+			System.out.println("No hay movimientos posibles");
 		}
 		System.out.println("El mejor movimiento posible es: "+move.moveString());
 	}
@@ -217,7 +215,8 @@ public class Game {
 		drawing.addMouseListener(clickAction);
 		drawing.setClickManager(clickManager);
 		drawing.setGame(this);
-		frame.setSize(WIDTH, HEIGHT);
+		frame.setSize(getBoard().getSize()*40+17,getBoard().getSize()*40+39);
+		frame.setLocationRelativeTo(null);
 		frame.add(drawing);		
 		frame.setVisible(true);
 		update();

@@ -35,25 +35,25 @@ public class Drawing extends JPanel {
 					g2d.setColor(Color.LIGHT_GRAY);
 				else
 					g2d.setColor(Color.WHITE);
-				g2d.fillRect(squareSize * (1 + j), squareSize * (1 + i),
+				g2d.fillRect(squareSize * j, squareSize * i,
 						squareSize, squareSize);
 				//TODO: Tenemos que ver que hacemos con el Empty.png
 				g2d.drawImage(
 						Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
-						squareSize * (1 + j),squareSize * (1 + i), this);
+						squareSize * j,squareSize * i, this);
 			}
 		}
 		if(clickManager.getSquareClicked()!=null){
 			g2d.setColor(Color.RED);
 			int i=clickManager.getSquareClicked().x;
 			int j=clickManager.getSquareClicked().y;
-			g2d.fillRect((j+1)*squareSize, (i+1)*squareSize, squareSize, squareSize);
+			g2d.fillRect(j*squareSize, i*squareSize, squareSize, squareSize);
 			g2d.drawImage(
 			Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
-			squareSize * (1 + j),squareSize * (1 + i), this);
+			squareSize * j,squareSize * i, this);
 		}
 		g2d.setColor(Color.black);
-		g2d.drawRect(40, 40, 40*board.getSize(), 40*board.getSize());
+		g2d.drawRect(0, 0, 40*board.getSize(), 40*board.getSize());
 	}
 
 	public void setGame(Game game) {
