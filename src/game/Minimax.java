@@ -219,25 +219,25 @@ public class Minimax {
 							}
 						}
 						
-						if(flag && (simmetricBoard&4)==3){
+						if(flag && (simmetricBoard&4)==4){
 							if(movesDone.contains(move.xSymmetric(board))){
 								flag=false;
 							}
 						}
 						
-						if(flag && (simmetricBoard&8)==4){
+						if(flag && (simmetricBoard&8)==8){
 							if(movesDone.contains(move.ySymmetric(board))){
 								flag=false;
 							}
 						}
 						
-						if(flag && (simmetricBoard&16)==5){
+						if(flag && (simmetricBoard&16)==16){
 							if(movesDone.contains(move.firstDiagSymmetric(board))){
 								flag=false;
 							}
 						}
 						
-						if(flag && (simmetricBoard&32)==6){
+						if(flag && (simmetricBoard&32)==32){
 							if(movesDone.contains(move.secondDiagSymmetric(board))){
 								flag=false;
 							}
