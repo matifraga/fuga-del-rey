@@ -126,7 +126,7 @@ public class Board {
 	 */
 	/*Queda para emprolijar codigo*/
 	public int symmetrys() {
-		int answer=0x7F;
+		int answer=0x3F;
 		Point point;
 		
 		for(int i=0; i<size; i++)

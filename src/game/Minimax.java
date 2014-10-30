@@ -52,17 +52,7 @@ public class Minimax {
 				}
 				start = new Node();
 			}
-			auxMove = minimax(state, depth++, prune, start, timeBound);
-			
-			/*
-			 * if(auxMove!=null){ if(tree){
-			 * start.setLabel("START "+auxMove.getValue());
-			 * start.setColor("salmon"); try { Node.close(); } catch (Exception
-			 * e) { System.out.println("Hubo un error al cerrar el tree.dot"); }
-			 * } move=auxMove; //Renombro if(tree)
-			 * Node.rename("treeAux.dot","tree.dot"); }
-			 */
-			
+			auxMove = minimax(state, depth++, prune, start, timeBound);			
 			if (auxMove != null) {
 				move = auxMove;
 				if (tree) {
@@ -92,7 +82,7 @@ public class Minimax {
 		return move;
 	}
 
-	public static Move minimax(Game state, int depth, Integer prune, Node me,
+	public static Move minimax2(Game state, int depth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == 0 || state.getTurn() > 2) {
 			return new Move(state.value());
@@ -172,7 +162,7 @@ public class Minimax {
 	}
 	
 	
-	public static Move minimaxWithRotations(Game state, int depth, Integer prune, Node me,
+	public static Move minimax(Game state, int depth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == 0 || state.getTurn() > 2) {
 			return new Move(state.value());
@@ -199,11 +189,7 @@ public class Minimax {
 
 						stateAux = state.copy();
 						stateAux.move(move);
-						if (me != null) // Si es creando el arbol de llamadas
-							son = new Node();
-						// System.out.println(blancos(4-depth)+"Entre: "+move);
 						
-						Move resp=null;
 						//checkear segun el bit, si esta en el set, si esta no lo hago						
 						boolean flag=true;
 						
@@ -242,8 +228,12 @@ public class Minimax {
 								flag=false;
 							}
 						}
-						
+						movesDone.add(move);
 						if(flag){
+							Move resp=null;
+							if (me != null) // Si es creando el arbol de llamadas
+								son = new Node();
+							// System.out.println(blancos(4-depth)+"Entre: "+move);
 							resp = minimax(stateAux, depth - 1, actualPrune,
 									son, timeBound);
 							if (resp == null)
