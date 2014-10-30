@@ -2,6 +2,8 @@ package game;
 
 import java.awt.Point;
 
+import clases.Board;
+
 public class Move {
 
 	protected int xOrigin,xDest,yOrigin,yDest,value;
@@ -75,31 +77,31 @@ public class Move {
 		return true;
 	}
 	
-	public Move xSymmetric(){
+	public Move xSymmetric(Board board){
+		return new Move(board.xSymmetric(xOrigin,yOrigin),board.xSymmetric(xDest, yDest));
+	}
+	
+	public Move ySymmetric(Board board){
+		return new Move(board.ySymmetric(xOrigin,yOrigin),board.ySymmetric(xDest, yDest));
+	}
+	
+	public Move firstDiagSymmetric(Board board){
+		return new Move(board.firstDiagSymmetric(xOrigin,yOrigin),board.firstDiagSymmetric(xDest, yDest));
+	}
+	
+	public Move secondDiagSymmetric(Board board){
+		return new Move(board.secondDiagSymmetric(xOrigin,yOrigin),board.secondDiagSymmetric(xDest, yDest));
+	}
+	
+	public Move rotated90(Board board){
+		return new Move(board.rotated90(xOrigin, yOrigin),board.rotated90(xDest, yDest));
+	}
+	
+	public Move rotated180(Board board){
 		return new Move();
 	}
 	
-	public Move ySymmetric(){
-		return new Move();
-	}
-	
-	public Move firstDiagSymmetric(){
-		return new Move();
-	}
-	
-	public Move secondDiagSymmetric(){
-		return new Move();
-	}
-	
-	public Move rotated90(){
-		return new Move();
-	}
-	
-	public Move rotated180(){
-		return new Move();
-	}
-	
-	public Move rotated270(){
+	public Move rotated270(Board board){
 		return new Move();
 	}
 	

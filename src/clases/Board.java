@@ -131,31 +131,31 @@ public class Board {
 		return 0;
 	}
 	
-	public Point xSymmetric(Point point){
-		return new Point(size-1-point.x, point.y);
+	public Point xSymmetric(int i, int j){
+		return new Point(size-1-i, j);
 	}
 	
-	public Point ySymmetric(Point point){
-		return new Point(point.x, size-1-point.y);
+	public Point ySymmetric(int i, int j){
+		return new Point(i, size-1-j);
 	}
 	
-	public Point firstDiagSymmetric(Point point){
-		return new Point(point.y,point.x);
+	public Point firstDiagSymmetric(int i, int j){
+		return new Point(j,i);
 	}
 	
-	public Point secondDiagSymmetric(Point point){
-		return new Point(size-1-point.y,size-1-point.x);
+	public Point secondDiagSymmetric(int i, int j){
+		return new Point(size-1-j,size-1-i);
 	}
 	
-	public Point rotated90(Point point){
-		return new Point(point.y,size-1-point.x);
+	public Point rotated90(int i, int j){
+		return new Point(j,size-1-i);
 	}
 	
-	public Point rotate180(Point point){
-		return new Point(size-1-point.x,size-1-point.y);
+	public Point rotate180(int i, int j){
+		return new Point(size-1-i,size-1-j);
 	}
 	
-	public Point rotate270(Point point){
-		return new Point(size-1-point.y,point.x);
+	public Point rotate270(int i, int j){
+		return new Point(size-1-j,i);
 	}
 }
