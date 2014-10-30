@@ -1,10 +1,19 @@
 package game;
 
+import java.awt.Point;
+
 public class Move {
 
 	protected int xOrigin,xDest,yOrigin,yDest,value;
 	
 	public Move(){};
+	
+	public Move(Point origin, Point dest){
+		this.xOrigin=origin.x;
+		this.xDest=dest.x;
+		this.yOrigin=origin.y;
+		this.yDest=dest.y;
+	}
 	
 	public Move(int value){
 		this.value=value;
@@ -40,4 +49,58 @@ public class Move {
 	public String moveString(){
 		return "("+xOrigin+","+yOrigin+")("+xDest+","+yDest+")";
 	}
+	
+	@Override
+	public int hashCode() {;
+		return 599*xOrigin+691*yOrigin+487*xDest+263*yDest;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Move other = (Move) obj;
+		if (xDest != other.xDest)
+			return false;
+		if (xOrigin != other.xOrigin)
+			return false;
+		if (yDest != other.yDest)
+			return false;
+		if (yOrigin != other.yOrigin)
+			return false;
+		return true;
+	}
+	
+	public Move xSymmetric(){
+		return new Move();
+	}
+	
+	public Move ySymmetric(){
+		return new Move();
+	}
+	
+	public Move firstDiagSymmetric(){
+		return new Move();
+	}
+	
+	public Move secondDiagSymmetric(){
+		return new Move();
+	}
+	
+	public Move rotated90(){
+		return new Move();
+	}
+	
+	public Move rotated180(){
+		return new Move();
+	}
+	
+	public Move rotated270(){
+		return new Move();
+	}
+	
 }
