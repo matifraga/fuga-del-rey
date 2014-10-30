@@ -116,19 +116,74 @@ public class Board {
 		return board;
 	}
 
-	/* devuelve una mascara de bits 6543210:
-	 * 0: igual tablero al rotarlo 90º
-	 * 1: igual tablero al rotarlo 180º
-	 * 2: igual tablero al rotarlo 270º
+	/* devuelve una mascara de bits 654321:
+	 * 1: igual tablero al rotarlo 90º
+	 * 2: igual tablero al rotarlo 180º
 	 * 3: simetrico respecto a x
 	 * 4: simetrico respecto a y
 	 * 5: simetrico respecto a la diagonal principal
 	 * 6: simetrico respecto a la diagonal secundaria
 	 */
+	/*Queda para emprolijar codigo*/
 	public int symmetrys() {
-		int answer=0x8F; // 1111111
-			
-		return 0;
+		int answer=0x7F;
+		Point point;
+		
+		for(int i=0; i<size; i++)
+			for(int j=0; j<size; j++){
+				point=rotated90(i, j);
+				if(board[i][j]!=board[point.x][point.y]){
+					i=size; j=size; //sale del doble for por no ser simetrico
+					answer-=1;
+				}
+			}
+		
+		for(int i=0; i<size; i++)
+			for(int j=0; j<size; j++){
+				point=rotated180(i, j);
+				if(board[i][j]!=board[point.x][point.y]){
+					i=size; j=size; //sale del doble for por no ser simetrico
+					answer-=2;
+				}
+			}
+		
+		for(int i=0; i<size; i++)
+			for(int j=0; j<size; j++){
+				point=xSymmetric(i, j);
+				if(board[i][j]!=board[point.x][point.y]){
+					i=size; j=size; //sale del doble for por no ser simetrico
+					answer-=4;
+				}
+			}
+		
+		for(int i=0; i<size; i++)
+			for(int j=0; j<size; j++){
+				point=ySymmetric(i, j);
+				if(board[i][j]!=board[point.x][point.y]){
+					i=size; j=size; //sale del doble for por no ser simetrico
+					answer-=8;
+				}
+			}
+		
+		for(int i=0; i<size; i++)
+			for(int j=0; j<size; j++){
+				point=firstDiagSymmetric(i, j);
+				if(board[i][j]!=board[point.x][point.y]){
+					i=size; j=size; //sale del doble for por no ser simetrico
+					answer-=16;
+				}
+			}
+		
+		for(int i=0; i<size; i++)
+			for(int j=0; j<size; j++){
+				point=secondDiagSymmetric(i, j);
+				if(board[i][j]!=board[point.x][point.y]){
+					i=size; j=size; //sale del doble for por no ser simetrico
+					answer-=32;
+				}
+			}
+		
+		return answer;
 	}
 	
 	public Point xSymmetric(int i, int j){

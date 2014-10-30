@@ -64,7 +64,6 @@ public class Main {
 			System.out.println("Parámetros inválidos");
 			return;
 		}
-		
 		game.setParameters(time, depth, prune);
 		try {
 			game.loadBoardFrom(new File(file));
