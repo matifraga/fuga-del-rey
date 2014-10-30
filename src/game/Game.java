@@ -22,10 +22,18 @@ public class Game {
 	private Board board;
 	private int turn;
 	private boolean isKingAlive=true;
-	private Long time=500L;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
-	private int depth=4; //entrada
-	private Integer prune=Integer.MAX_VALUE; //null es sin poda, Integer.MAX_INT es con poda
+	private Long time=null;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
+	private int depth=0; //entrada
+	private Integer prune=null; //null es sin poda, Integer.MAX_INT es con poda
 	private int humanTurn=1;
+	
+	public void setParameters(int time, int depth, Integer prune) {
+		if(time!=0)
+			this.time=time*1000L;
+		this.depth=depth;
+		this.prune=prune;
+		
+	}
 	
 	public int getComputerTurn() {
 		return 3-humanTurn;
