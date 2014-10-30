@@ -151,11 +151,11 @@ public class Board {
 		return new Point(j,size-1-i);
 	}
 	
-	public Point rotate180(int i, int j){
+	public Point rotated180(int i, int j){
 		return new Point(size-1-i,size-1-j);
 	}
 	
-	public Point rotate270(int i, int j){
+	public Point rotated270(int i, int j){
 		return new Point(size-1-j,i);
 	}
 }

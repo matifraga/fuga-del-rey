@@ -98,11 +98,11 @@ public class Move {
 	}
 	
 	public Move rotated180(Board board){
-		return new Move();
+		return new Move(board.rotated180(xOrigin, yOrigin),board.rotated180(xDest, yDest));
 	}
 	
 	public Move rotated270(Board board){
-		return new Move();
+		return new Move(board.rotated270(xOrigin, yOrigin),board.rotated270(xDest, yDest));
 	}
 	
 }
