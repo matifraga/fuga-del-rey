@@ -1,8 +1,10 @@
 package game;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import treeCalls.Node;
 import Pieces.Piece;
@@ -184,7 +186,8 @@ public class Minimax {
 		if (prune != null)
 			actualPrune = Integer.MAX_VALUE;
 		
-		int simetricBoard = board.symmetrys();
+		int simmetricBoard = board.symmetrys();
+		Set<Move> movesDone = new HashSet<Move>();
 		
 		for (int i = 0; i < board.getSize(); i++) {
 			for (int j = 0; j < board.getSize(); j++) {
@@ -199,50 +202,96 @@ public class Minimax {
 						if (me != null) // Si es creando el arbol de llamadas
 							son = new Node();
 						// System.out.println(blancos(4-depth)+"Entre: "+move);
-						Move resp = minimax(stateAux, depth - 1, actualPrune,
-								son, timeBound);
-						if (resp == null)
-							return null;
-						move.setValue(-resp.getValue());
-						// System.out.println(blancos(4-depth)+"Sali: "+move);
-						if (son != null) { // Si es creando el arbol de llamadas
-							son.setLabel(move.toString());
-							if (depth % 2 == 0)
-								son.setForm("ellipse");
-							else
-								son.setForm("box");
-							me.link(son);
-						}
-						if (move.getValue() > answer.getValue()) {
-							if (me != null) { // Si es creando el arbol de llamadas
-								nodeAnswer = son;
-							}
-							answer = move;
-							if (answer.getValue() == Integer.MAX_VALUE) {
-								if (nodeAnswer != null)
-									nodeAnswer.setColor("salmon");
-								return answer;
+						
+						Move resp=null;
+						//checkear segun el bit, si esta en el set, si esta no lo hago						
+						boolean flag=true;
+						
+						if((simmetricBoard&1)==1){
+							if(movesDone.contains(move.rotated90(board)) || movesDone.contains(move.rotated270(board))){
+								flag=false;
 							}
 						}
-						if (prune != null) { // si es con poda
-							if (move.getValue() >= prune) {
-								if (nodeAnswer != null)
-									nodeAnswer.setColor("salmon");
+						
+						if(flag && (simmetricBoard&2)==2){
+							if(movesDone.contains(move.rotated180(board))){
+								flag=false;
+							}
+						}
+						
+						if(flag && (simmetricBoard&4)==3){
+							if(movesDone.contains(move.xSymmetric(board))){
+								flag=false;
+							}
+						}
+						
+						if(flag && (simmetricBoard&8)==4){
+							if(movesDone.contains(move.ySymmetric(board))){
+								flag=false;
+							}
+						}
+						
+						if(flag && (simmetricBoard&16)==5){
+							if(movesDone.contains(move.firstDiagSymmetric(board))){
+								flag=false;
+							}
+						}
+						
+						if(flag && (simmetricBoard&32)==6){
+							if(movesDone.contains(move.secondDiagSymmetric(board))){
+								flag=false;
+							}
+						}
+						
+						if(flag){
+							resp = minimax(stateAux, depth - 1, actualPrune,
+									son, timeBound);
+							if (resp == null)
+								return null;
+							
+							move.setValue(-resp.getValue());
+							// System.out.println(blancos(4-depth)+"Sali: "+move);
+							if (son != null) { // Si es creando el arbol de llamadas
+								son.setLabel(move.toString());
+								if (depth % 2 == 0)
+									son.setForm("ellipse");
+								else
+									son.setForm("box");
+								me.link(son);
+							}
+							if (move.getValue() > answer.getValue()) {
 								if (me != null) { // Si es creando el arbol de llamadas
-									son = new Node();
-									son.setLabel("Poda");
-									son.setColor("gray");
-									if (depth % 2 == 0)
-										son.setForm("ellipse");
-									else
-										son.setForm("box");
-									me.link(son);
+									nodeAnswer = son;
 								}
-								return answer;
-							} else {
-								actualPrune = -answer.getValue();
+								answer = move;
+								if (answer.getValue() == Integer.MAX_VALUE) {
+									if (nodeAnswer != null)
+										nodeAnswer.setColor("salmon");
+									return answer;
+								}
+							}
+							if (prune != null) { // si es con poda
+								if (move.getValue() >= prune) {
+									if (nodeAnswer != null)
+										nodeAnswer.setColor("salmon");
+									if (me != null) { // Si es creando el arbol de llamadas
+										son = new Node();
+										son.setLabel("Poda");
+										son.setColor("gray");
+										if (depth % 2 == 0)
+											son.setForm("ellipse");
+										else
+											son.setForm("box");
+										me.link(son);
+									}
+									return answer;
+								} else {
+									actualPrune = -answer.getValue();
+								}
 							}
 						}
+						
+						
 					}
 				}
 			}
