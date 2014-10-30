@@ -14,6 +14,6 @@ public class Main {
 			System.out.println("Hubo un error al abrir el archivo");
 			return;
 		}
-		game.start();
+		game.getNextBestMove(true);
 	}
 }

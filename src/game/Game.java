@@ -22,7 +22,7 @@ public class Game {
 	private Board board;
 	private int turn;
 	private boolean isKingAlive=true;
-	private Long time=1000L;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
+	private Long time=500L;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
 	private int depth=4; //entrada
 	private Integer prune=Integer.MAX_VALUE; //null es sin poda, Integer.MAX_INT es con poda
 	private int humanTurn=1;
