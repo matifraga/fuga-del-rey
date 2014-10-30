@@ -18,13 +18,10 @@ public class Minimax {
 		Piece pieceToMove = board.getPiece(x, y);
 		for (int i = 0; i < 4; i++) {
 			int dMove = 1;
-			while ((piece = board
-					.getPiece(x + dx[i] * dMove, y + dy[i] * dMove)) != null
+			while ((piece = board.getPiece(x + dx[i] * dMove, y + dy[i] * dMove)) != null
 					&& piece.canJumpBy(pieceToMove)) {
-
 				if (piece.canStepBy(pieceToMove)) {
-					answer.add(new Move(x, y, x + dx[i] * dMove, y + dy[i]
-							* dMove));
+					answer.add(new Move(x, y, x + dx[i] * dMove, y + dy[i] * dMove));
 				}
 				dMove++;
 			}
@@ -54,6 +51,7 @@ public class Minimax {
 				start = new Node();
 			}
 			auxMove = minimax(state, depth++, prune, start, timeBound);
+			
 			/*
 			 * if(auxMove!=null){ if(tree){
 			 * start.setLabel("START "+auxMove.getValue());
@@ -62,7 +60,7 @@ public class Minimax {
 			 * } move=auxMove; //Renombro if(tree)
 			 * Node.rename("treeAux.dot","tree.dot"); }
 			 */
-
+			
 			if (auxMove != null) {
 				move = auxMove;
 				if (tree) {
@@ -75,10 +73,9 @@ public class Minimax {
 					}
 					Node.rename("treeAux.dot","tree.dot");
 				}
-
 			}
-
 		}
+		
 		if (tree && auxMove==null) {
 			try {
 				Node.close();
@@ -99,18 +96,13 @@ public class Minimax {
 			return new Move(state.value());
 		}
 		Board board = state.getBoard();
-		Move answer = new Move(Integer.MIN_VALUE); // Inicializo el valor del
-													// mejor movimiento como
-													// -inf para que cualquier
-													// movimiento sea mejor
+		Move answer = new Move(Integer.MIN_VALUE); // Inicializo el valor del mejor movimiento como -inf para que cualquier movimiento sea mejor
 		List<Move> possibleMoves;
 		Game stateAux;
 		Integer actualPrune = null; // poda actual
-		Node son = null, nodeAnswer = null; // hijos y nodo respuesta para el
-											// arbol de llamadas
+		Node son = null, nodeAnswer = null; // hijos y nodo respuesta para el arbol de llamadas
 		if (prune != null)
 			actualPrune = Integer.MAX_VALUE;
-
 		for (int i = 0; i < board.getSize(); i++) {
 			for (int j = 0; j < board.getSize(); j++) {
 				if (System.currentTimeMillis() > timeBound)
@@ -129,7 +121,6 @@ public class Minimax {
 						if (resp == null)
 							return null;
 						move.setValue(-resp.getValue());
-
 						// System.out.println(blancos(4-depth)+"Sali: "+move);
 						if (son != null) { // Si es creando el arbol de llamadas
 							son.setLabel(move.toString());
@@ -139,10 +130,8 @@ public class Minimax {
 								son.setForm("box");
 							me.link(son);
 						}
-
 						if (move.getValue() > answer.getValue()) {
-							if (me != null) { // Si es creando el arbol de
-												// llamadas
+							if (me != null) { // Si es creando el arbol de llamadas
 								nodeAnswer = son;
 							}
 							answer = move;
@@ -156,8 +145,7 @@ public class Minimax {
 							if (move.getValue() >= prune) {
 								if (nodeAnswer != null)
 									nodeAnswer.setColor("salmon");
-								if (me != null) { // Si es creando el arbol de
-													// llamadas
+								if (me != null) { // Si es creando el arbol de llamadas
 									son = new Node();
 									son.setLabel("Poda");
 									son.setColor("gray");
@@ -172,7 +160,6 @@ public class Minimax {
 								actualPrune = -answer.getValue();
 							}
 						}
-
 					}
 				}
 			}
