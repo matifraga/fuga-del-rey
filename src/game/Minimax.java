@@ -168,7 +168,90 @@ public class Minimax {
 			nodeAnswer.setColor("salmon");
 		return answer;
 	}
+	
+	
+	public static Move minimaxWithRotations(Game state, int depth, Integer prune, Node me,
+			Long timeBound) {
+		if (depth == 0 || state.getTurn() > 2) {
+			return new Move(state.value());
+		}
+		Board board = state.getBoard();
+		Move answer = new Move(Integer.MIN_VALUE); // Inicializo el valor del mejor movimiento como -inf para que cualquier movimiento sea mejor
+		List<Move> possibleMoves;
+		Game stateAux;
+		Integer actualPrune = null; // poda actual
+		Node son = null, nodeAnswer = null; // hijos y nodo respuesta para el arbol de llamadas
+		if (prune != null)
+			actualPrune = Integer.MAX_VALUE;
+		
+		int simetricBoard = board.symmetrys();
+		
+		for (int i = 0; i < board.getSize(); i++) {
+			for (int j = 0; j < board.getSize(); j++) {
+				if (System.currentTimeMillis() > timeBound)
+					return null;
+				if (board.getPiece(i, j).getOwner() == state.getTurn()) {
+					possibleMoves = getPossibleMovesFrom(board, i, j);
+					for (Move move : possibleMoves) {
 
+						stateAux = state.copy();
+						stateAux.move(move);
+						if (me != null) // Si es creando el arbol de llamadas
+							son = new Node();
+						// System.out.println(blancos(4-depth)+"Entre: "+move);
+						Move resp = minimax(stateAux, depth - 1, actualPrune,
+								son, timeBound);
+						if (resp == null)
+							return null;
+						move.setValue(-resp.getValue());
+						// System.out.println(blancos(4-depth)+"Sali: "+move);
+						if (son != null) { // Si es creando el arbol de llamadas
+							son.setLabel(move.toString());
+							if (depth % 2 == 0)
+								son.setForm("ellipse");
+							else
+								son.setForm("box");
+							me.link(son);
+						}
+						if (move.getValue() > answer.getValue()) {
+							if (me != null) { // Si es creando el arbol de llamadas
+								nodeAnswer = son;
+							}
+							answer = move;
+							if (answer.getValue() == Integer.MAX_VALUE) {
+								if (nodeAnswer != null)
+									nodeAnswer.setColor("salmon");
+								return answer;
+							}
+						}
+						if (prune != null) { // si es con poda
+							if (move.getValue() >= prune) {
+								if (nodeAnswer != null)
+									nodeAnswer.setColor("salmon");
+								if (me != null) { // Si es creando el arbol de llamadas
+									son = new Node();
+									son.setLabel("Poda");
+									son.setColor("gray");
+									if (depth % 2 == 0)
+										son.setForm("ellipse");
+									else
+										son.setForm("box");
+									me.link(son);
+								}
+								return answer;
+							} else {
+								actualPrune = -answer.getValue();
+							}
+						}
+					}
+				}
+			}
+		}
+		if (nodeAnswer != null)
+			nodeAnswer.setColor("salmon");
+		return answer;
+	}	
+	
 	// para debugear
 	private static String blancos(int a) {
 		String b = "";

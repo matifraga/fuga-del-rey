@@ -1,5 +1,7 @@
 package clases;
 
+import java.awt.Point;
+
 import Pieces.Piece;
 import Pieces.PieceManager;
 import Pieces.Throne;
@@ -73,22 +75,13 @@ public class Board {
 
 	public int value(){
 		int answer=0;
-		boolean kingIsAlive=false;
 		Piece piece;
 		for(int i=0; i<size;i++){
 			for(int j=0; j<size; j++){
 				if((piece=getPiece(i, j)).getOwner()==1){
 					if(piece==PieceManager.getKingInstance()){
-						kingIsAlive=true;
-						if( (i==0 && j==0) ||
-							(i==0 && j==size-1) ||
-							(i==size-1 && j==0) ||
-							(i==size-1 && j==size-1)){
-							return Integer.MAX_VALUE;
-						}
 						answer+=((i-size/2)*(i-size/2)+(j-size/2)*(j-size/2))*(20.0/size); //creo que habria que disminuir este 
 							  //numero, para que no se mande tan de una a bloquear al rey
-						
 					}						
 					answer+=16;
 				}
@@ -97,10 +90,7 @@ public class Board {
 				}
 			}
 		}
-		if(kingIsAlive)
-			return answer;
-		return (Integer.MIN_VALUE+1);
-		
+		return answer;
 	}
 
 	public Throne getThrone(){
@@ -124,5 +114,48 @@ public class Board {
 			}
 		}
 		return board;
+	}
+
+	/* devuelve una mascara de bits 6543210:
+	 * 0: igual tablero al rotarlo 90º
+	 * 1: igual tablero al rotarlo 180º
+	 * 2: igual tablero al rotarlo 270º
+	 * 3: simetrico respecto a x
+	 * 4: simetrico respecto a y
+	 * 5: simetrico respecto a la diagonal principal
+	 * 6: simetrico respecto a la diagonal secundaria
+	 */
+	public int symmetrys() {
+		int answer=0x8F; // 1111111
+			
+		return 0;
+	}
+	
+	public Point xSymmetric(Point point){
+		return new Point(size-1-point.x, point.y);
+	}
+	
+	public Point ySymmetric(Point point){
+		return new Point(point.x, size-1-point.y);
+	}
+	
+	public Point firstDiagSymmetric(Point point){
+		return new Point(point.y,point.x);
+	}
+	
+	public Point secondDiagSymmetric(Point point){
+		return new Point(size-1-point.y,size-1-point.x);
+	}
+	
+	public Point rotated90(Point point){
+		return new Point(point.y,size-1-point.x);
+	}
+	
+	public Point rotate180(Point point){
+		return new Point(size-1-point.x,size-1-point.y);
+	}
+	
+	public Point rotate270(Point point){
+		return new Point(size-1-point.y,point.x);
 	}
 }
