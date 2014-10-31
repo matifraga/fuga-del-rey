@@ -161,7 +161,7 @@ public class Game {
 		}else{
 			move=Minimax.minimaxByTime(this, time, prune, tree);
 		}
-		if(move==null || move.isValid()){
+		if(move==null || !move.isValid()){
 			System.out.println("No hay movimientos posibles");
 			this.turn=15; //No es el turno de nadie, el juego termina
 		}
@@ -180,12 +180,16 @@ public class Game {
 		return board;
 	}
 	
-	/*Retorna una copia de la instacia actual pero solo para uso interno del minimax*/
+	/*Retorna una copia de la instacia actual*/
 	public Game copy(){ 
 		Game game=new Game();
 		game.board=this.board.copy();
 		game.turn=this.turn;
 		game.isKingAlive=this.isKingAlive;
+		game.humanTurn=this.humanTurn;
+		game.depth=this.depth;
+		game.time=this.time;
+		game.prune=this.prune;
 		return game;
 	}
 	
