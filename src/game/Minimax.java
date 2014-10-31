@@ -6,9 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import pieces.Piece;
 import treeCalls.Node;
-import Pieces.Piece;
-import clases.Board;
 
 public class Minimax {
 
@@ -21,22 +20,48 @@ public class Minimax {
 		for (int i = 0; i < 4; i++) {
 			int dMove = 1;
 			while ((piece = board.getPiece(x + dx[i] * dMove, y + dy[i] * dMove)) != null
-					&& piece.canJumpBy(pieceToMove)) {
-				if (piece.canStepBy(pieceToMove)) {
+					&& piece.canBeJumpBy(pieceToMove)) {
+				if (piece.canBeStepBy(pieceToMove)) {
 					answer.add(new Move(x, y, x + dx[i] * dMove, y + dy[i] * dMove));
 				}
 				dMove++;
 			}
 
-			if (piece != null && piece.canStepBy(pieceToMove)) {
+			if (piece != null && piece.canBeStepBy(pieceToMove)) {
 				answer.add(new Move(x, y, x + dx[i] * dMove, y + dy[i] * dMove));
 			}
 		}
 		return answer;
 	}
 
+	public static Move minimaxByDepth(Game state, int depth, boolean prune,
+			boolean tree) {
+		Move answer=null;
+		Node start=null;
+		if(tree){
+			try {
+			Node.start("tree.dot");
+			} catch (Exception e) {
+				System.out.println("Hubo un error al abrir el tree.dot");
+			}
+			start=new Node();
+		}
+		answer=Minimax.minimax(state,depth,(prune?Integer.MAX_VALUE:null),start,Long.MAX_VALUE);
+		if(tree){
+			start.setLabel("START "+answer.getValue());
+			start.setColor("salmon");
+			try {
+				Node.close();
+			} catch (Exception e) {
+				System.out.println("Hubo un error al cerrar el tree.dot");
+			}
+		}
+		return answer;
+	}
+	
+	
 	/* Recibe el tiempo en milisegundos */
-	public static Move minimaxByTime(Game state, Long time, Integer prune,
+	public static Move minimaxByTime(Game state, Long time, boolean prune,
 			boolean tree) {
 		Long timeBound = System.currentTimeMillis() + time;
 		int depth = 1;
@@ -52,7 +77,7 @@ public class Minimax {
 				}
 				start = new Node();
 			}
-			auxMove = minimax(state, depth++, prune, start, timeBound);			
+			auxMove = minimax(state, depth++, (prune?Integer.MAX_VALUE:null), start, timeBound);			
 			if (auxMove != null) {
 				move = auxMove;
 				if (tree) {

@@ -11,8 +11,7 @@ public class Main {
 		String file=null;
 		int depth=0;
 		int time = 0;
-		Integer prune=null;
-		boolean console=false, visual=false, tree=false;
+		boolean console=false, visual=false, tree=false, prune=false;
 		try {
 			for(int i=0 ; i<args.length ; i++) {
 				if(args[i].equals("-file")) {
@@ -43,9 +42,9 @@ public class Main {
 					console=true;
 				} else
 				if(args[i].equals("-prune")) {
-					if(prune!=null)
+					if(prune)
 						throw new Exception();
-					prune=Integer.MAX_VALUE;
+					prune=true;
 				} else
 				if(args[i].equals("-tree")) {
 					if(tree)
@@ -61,7 +60,7 @@ public class Main {
 			}
 		
 		} catch (Exception e) {
-			System.out.println("Parámetros inválidos");
+			System.out.println("Parametros invalidos");
 			return;
 		}
 		game.setParameters(time, depth, prune);

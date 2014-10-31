@@ -1,4 +1,4 @@
-package Pieces;
+package pieces;
 
 public class King extends Piece {
 	
@@ -36,12 +36,12 @@ public class King extends Piece {
 	}
 
 	@Override
-	public boolean canStepBy(Piece piece) {
+	public boolean canBeStepBy(Piece piece) {
 		return false;
 	}
 
 	@Override
-	public boolean canJumpBy(Piece piece) {
+	public boolean canBeJumpBy(Piece piece) {
 		return false;
 	}
 

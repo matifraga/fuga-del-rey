@@ -1,12 +1,11 @@
 package graphics;
 
+import game.Board;
 import game.Game;
 
 import java.awt.Point;
 
 import javax.swing.SwingUtilities;
-
-import clases.Board;
 
 public class ClickManager {
 

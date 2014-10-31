@@ -1,4 +1,4 @@
-package Pieces;
+package pieces;
 
 public class SmallThrone extends Throne {
 	
@@ -7,7 +7,7 @@ public class SmallThrone extends Throne {
 	}
 	
 	@Override
-	public boolean canJumpBy(Piece piece) {
+	public boolean canBeJumpBy(Piece piece) {
 		return true;
 	}
 

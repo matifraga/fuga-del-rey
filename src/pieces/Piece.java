@@ -1,4 +1,4 @@
-package Pieces;
+package pieces;
 
 public abstract class Piece {
 
@@ -6,8 +6,8 @@ public abstract class Piece {
 	protected int owner;
 	
 	public abstract boolean canGetKilled(Piece attacker, Piece oppositePartner, Piece sideAttacker1, Piece sideAttacker2);
-	public abstract boolean canStepBy(Piece piece);
-	public abstract boolean canJumpBy(Piece piece);
+	public abstract boolean canBeStepBy(Piece piece);
+	public abstract boolean canBeJumpBy(Piece piece);
 	public abstract int value();
 	
 	public String getName(){

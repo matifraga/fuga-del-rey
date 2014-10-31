@@ -12,27 +12,25 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import pieces.Piece;
+import pieces.PieceManager;
 import treeCalls.Node;
-import Pieces.Piece;
-import Pieces.PieceManager;
-import clases.Board;
 
 public class Game {
 
 	private Board board;
 	private int turn;
 	private boolean isKingAlive=true;
-	private Long time=null;//entrada - ya pasado a milisegundos (recordemos que se lee en segundos)
-	private int depth=0; //entrada
-	private Integer prune=null; //null es sin poda, Integer.MAX_INT es con poda
+	private Long time=null;
+	private int depth=0;
+	private boolean prune=false;
 	private int humanTurn=1;
 	
-	public void setParameters(int time, int depth, Integer prune) {
+	public void setParameters(int time, int depth, boolean prune) {
 		if(time!=0)
 			this.time=time*1000L;
 		this.depth=depth;
 		this.prune=prune;
-		
 	}
 	
 	public int getComputerTurn() {
@@ -44,18 +42,16 @@ public class Game {
 	}
 	
 	public void loadBoardFrom(File file) throws Exception{
-		FileReader fr= new FileReader(file); //TODO: try-catch?
-		BufferedReader br = new BufferedReader(fr);
-		String str=br.readLine(); //Aca se lee de quien es el turno
-		
-		//TODO: validaciones de tablero
-		turn=3-Integer.parseInt(str);
-		str=br.readLine();
+		FileReader fileReader= new FileReader(file);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		String str=bufferedReader.readLine(); //Aca se lee de quien es el turno
+		turn=3-Integer.parseInt(str); //Leemos al reves los turnos
+		str=bufferedReader.readLine();
 		int size=str.length();
 		board=new Board(size);
 		board.fillRow(str, 0);
 		for(int i=1;i<size; i++){
-			str=br.readLine();
+			str=bufferedReader.readLine();
 			board.fillRow(str,i);	
 		}
 		board.putTowersAndThrone();		
@@ -65,23 +61,23 @@ public class Game {
 		move(move.xOrigin,move.yOrigin,move.xDest,move.yDest);
 	}
 	
-	public void move(int x1, int y1, int x2, int y2){ //private?
-		board.move(x1,y1,x2,y2);
+	public void move(int xOrigin, int yOrigin, int xDest, int yDest){ //private?
+		board.move(xOrigin,yOrigin,xDest,yDest);
 		changeTurn();
 		int dx[]={1,0,-1,0};
 		int dy[]={0,1,0,-1};
 		for(int i=0; i<4; i++){
-			if(board.getPiece(x2+dx[i], y2+dy[i])!=null &&
-				board.getPiece(x2+dx[i], y2+dy[i]).canGetKilled(
-					board.getPiece(x2, y2),
-					board.getPiece(x2+dx[i]*2, y2+dy[i]*2),
-					board.getPiece(x2+dx[i]+dy[i], y2+dy[i]+dx[i]),
-					board.getPiece(x2+dx[i]-dy[i], y2+dy[i]-dx[i]))){
-				if(board.getPiece(x2+dx[i], y2+dy[i])==PieceManager.getKingInstance()){
+			if(board.getPiece(xDest+dx[i], yDest+dy[i])!=null &&
+				board.getPiece(xDest+dx[i], yDest+dy[i]).canGetKilled(
+					board.getPiece(xDest, yDest),
+					board.getPiece(xDest+dx[i]*2, yDest+dy[i]*2),
+					board.getPiece(xDest+dx[i]+dy[i], yDest+dy[i]+dx[i]),
+					board.getPiece(xDest+dx[i]-dy[i], yDest+dy[i]-dx[i]))){
+				if(board.getPiece(xDest+dx[i], yDest+dy[i])==PieceManager.getKingInstance()){
 					isKingAlive=false;
 				}
-				board.removePiece(x2+dx[i],y2+dy[i]);
-				//TODO: Aca se puede agregar algo para contabilizar las fichas atrapadas
+				board.removePiece(xDest+dx[i],yDest+dy[i]);
+				//Aca se puede agregar algo para contabilizar las fichas atrapadas
 			}
 		}
 		isFinished();
@@ -91,12 +87,11 @@ public class Game {
 		return canMove(move.xOrigin, move.yOrigin, move.xDest, move.yDest);
 	}
 	
-	//Aca es donde deberia pasar la magia :P
-	public boolean canMove(int x1, int y1, int x2, int y2){ 
-		Piece pieceToMove=board.getPiece(x1, y1);
-		if(board.getPiece(x2, y2).canStepBy(pieceToMove)){
-			if((x1!=x2 || y1!=y2) && (x1==x2 || y1==y2)){
-				if(checkEmptyPath(pieceToMove,x1,y1,x2-x1,y2-y1)){
+	public boolean canMove(int xOrigin, int yOrigin, int xDest, int yDest){ 
+		Piece pieceToMove=board.getPiece(xOrigin, yOrigin);
+		if(board.getPiece(xDest, yDest).canBeStepBy(pieceToMove)){
+			if((xOrigin!=xDest && yOrigin==yDest) || (xOrigin==xDest && yOrigin!=yDest)){
+				if(checkEmptyPath(pieceToMove,xOrigin,yOrigin,xDest-xOrigin,yDest-yOrigin)){
 					return true;
 				}
 			}
@@ -105,22 +100,20 @@ public class Game {
 	}
 	
 	
-	private boolean checkEmptyPath(Piece pieceToMove, int x1, int y1, int dirX,	int dirY) {
-		int uniX=dirX/(dirX==0?1:Math.abs(dirX));
-		int uniY=dirY/(dirY==0?1:Math.abs(dirY));
+	private boolean checkEmptyPath(Piece pieceToMove, int xOrigin, int yOrigin, int dirX, int dirY) {
+		int uniX=(dirX==0?0:(dirX>0?1:-1)); //Indica la direccion en X
+		int uniY=(dirY==0?0:(dirY>0?1:-1)); //Indica la direccion en Y
 		for(int i=1; i<dirX+dirY;i++){
-			if(!board.getPiece(x1+i*uniX, y1+i*uniY).canJumpBy(pieceToMove))
+			if(!board.getPiece(xOrigin+i*uniX, yOrigin+i*uniY).canBeJumpBy(pieceToMove))
 				return false;
 		}
 		return true;
 	}
 
-	/**
-	 *  Devuelve si el juego ha concluido o no.
-	 *  
+	/*
+	 *  Devuelve si el juego ha concluido o no.  
 	 *  Si el juego termino, modifica la variable turn:
 	 *  turn=20 si ganaron los enemigos o turn=10 si ganaron los guardianes 
-	 * 
 	 */
 	public boolean isFinished(){
 		if(!isKingAlive)
@@ -134,7 +127,7 @@ public class Game {
 			return turn>2;
 	}
 	
-	
+	/*Este metodo se tiene que ejecutar despues de cada movimiento*/
 	public void update(){
 		if(isFinished()){
 			if(turn==10){
@@ -147,49 +140,33 @@ public class Game {
 		if(turn==getComputerTurn()){
 			Move move=null;
 			if(time==null){
-				move=Minimax.minimax(this,depth,prune,null,Long.MAX_VALUE);
+				move=Minimax.minimaxByDepth(this, depth, prune, false);
 			}else{
-				move=Minimax.minimaxByTime(this, time, prune,false);
+				move=Minimax.minimaxByTime(this, time, prune, false);
 			}
-			move(move);			
-			update();
+			if(move!=null && move.isValid()){
+				move(move);			
+				update();
+			}else{
+				System.out.println("No hay movimientos posibles");
+				turn=15; //No es el turno de nadie, el juego termina
+			}
 		}
 	}
 	
 	public void getNextBestMove(boolean tree){
 		Move move=null;
 		if(time==null){
-			Node start=null;
-			if(tree){
-				try {
-				Node.start("tree.dot");
-				} catch (Exception e) {
-					System.out.println("Hubo un error al abrir el tree.dot");
-				}
-				start=new Node();
-			}
-			move=Minimax.minimax(this,depth,prune,start,Long.MAX_VALUE);
-			if(tree){
-				start.setLabel("START "+move.getValue());
-				start.setColor("salmon");
-				try {
-					Node.close();
-				} catch (Exception e) {
-					System.out.println("Hubo un error al cerrar el tree.dot");
-				}
-			}
+			move=Minimax.minimaxByDepth(this, depth, prune, tree);
 		}else{
-			
 			move=Minimax.minimaxByTime(this, time, prune, tree);
 		}
-		if(move==null ){
-			this.turn=15; //Empate
+		if(move==null || move.isValid()){
 			System.out.println("No hay movimientos posibles");
+			this.turn=15; //No es el turno de nadie, el juego termina
 		}
 		System.out.println("El mejor movimiento posible es: "+move.moveString());
 	}
-
-
 
 	public int getTurn(){
 		return turn;
@@ -203,6 +180,7 @@ public class Game {
 		return board;
 	}
 	
+	/*Retorna una copia de la instacia actual pero solo para uso interno del minimax*/
 	public Game copy(){ 
 		Game game=new Game();
 		game.board=this.board.copy();

@@ -1,4 +1,4 @@
-package Pieces;
+package pieces;
 
 public class Tower extends Piece {
 
@@ -12,14 +12,14 @@ public class Tower extends Piece {
 	}
 
 	@Override
-	public boolean canStepBy(Piece piece) {
+	public boolean canBeStepBy(Piece piece) {
 		if(piece==PieceManager.getKingInstance())
 			return true;
 		return false;
 	}
 
 	@Override
-	public boolean canJumpBy(Piece piece) {
+	public boolean canBeJumpBy(Piece piece) {
 		return false;
 	}
 

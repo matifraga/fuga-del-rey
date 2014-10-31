@@ -1,4 +1,4 @@
-package Pieces;
+package pieces;
 
 public abstract class Throne extends Piece{
 
@@ -12,14 +12,14 @@ public abstract class Throne extends Piece{
 	}
 
 	@Override
-	public boolean canStepBy(Piece piece) {
+	public boolean canBeStepBy(Piece piece) {
 		if(piece==PieceManager.getKingInstance())
 			return true;
 		return false;
 	}
 
 	@Override
-	public abstract boolean canJumpBy(Piece piece);
+	public abstract boolean canBeJumpBy(Piece piece);
 
 	@Override
 	public int value() {

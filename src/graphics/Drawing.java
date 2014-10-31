@@ -1,5 +1,6 @@
 package graphics;
 
+import game.Board;
 import game.Game;
 
 import java.awt.Color;
@@ -8,8 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 
 import javax.swing.JPanel;
-
-import clases.Board;
 
 
 public class Drawing extends JPanel {
