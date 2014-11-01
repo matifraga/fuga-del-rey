@@ -28,7 +28,7 @@ public class Test {
 				try {
 					game.loadBoardFrom(new File(file));
 				} catch (Exception e) {
-					System.out.println("Hubo un error al abrir el archivo");
+					System.out.println(e.getMessage());
 					return;
 				}
 				depth=(i<12)?3:2;
@@ -36,7 +36,7 @@ public class Test {
 				game.setParameters(0, depth, false);
 				time=System.currentTimeMillis();
 				game.getBestNextMove(false);
-				time-=System.currentTimeMillis();
+				time=System.currentTimeMillis()-time;
 				System.out.println("El Tablero"+j+" tardo: "+time);
 			}
 		}
