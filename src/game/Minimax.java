@@ -11,24 +11,23 @@ import treeCalls.Node;
 
 public class Minimax {
 
-	public static List<Move> getPossibleMovesFrom(Board board, int x, int y) {
+	public static List<Move> getPossibleMovesFrom(Board board, int row, int col) {
 		int dx[] = { 1, 0, -1, 0 };
 		int dy[] = { 0, 1, 0, -1 };
 		List<Move> answer = new LinkedList<Move>();
 		Piece piece;
-		Piece pieceToMove = board.getPiece(x, y);
+		Piece pieceToMove = board.getPiece(row, col);
 		for (int i = 0; i < 4; i++) {
 			int dMove = 1;
-			while ((piece = board.getPiece(x + dx[i] * dMove, y + dy[i] * dMove)) != null
+			while ((piece = board.getPiece(row + dx[i] * dMove, col + dy[i] * dMove)) != null
 					&& piece.canBeJumpBy(pieceToMove)) {
 				if (piece.canBeStepBy(pieceToMove)) {
-					answer.add(new Move(x, y, x + dx[i] * dMove, y + dy[i] * dMove));
+					answer.add(new Move(row, col, row + dx[i] * dMove, col + dy[i] * dMove));
 				}
 				dMove++;
 			}
-
 			if (piece != null && piece.canBeStepBy(pieceToMove)) {
-				answer.add(new Move(x, y, x + dx[i] * dMove, y + dy[i] * dMove));
+				answer.add(new Move(row, col, row + dx[i] * dMove, col + dy[i] * dMove));
 			}
 		}
 		return answer;
@@ -67,7 +66,6 @@ public class Minimax {
 		int depth = 1;
 		Move move = null, auxMove=null;
 		while (System.currentTimeMillis() < timeBound) {
-			// System.out.println(timeBound-System.currentTimeMillis()+" "+depth);
 			Node start = null;
 			if (tree) {
 				try {
@@ -116,18 +114,17 @@ public class Minimax {
 		Move answer = new Move(Integer.MIN_VALUE); // Inicializo el valor del mejor movimiento como -inf para que cualquier movimiento sea mejor
 		List<Move> possibleMoves;
 		Game stateAux;
-		Integer actualPrune = null; // poda actual
+		Integer actualPrune = null;
 		Node son = null, nodeAnswer = null; // hijos y nodo respuesta para el arbol de llamadas
 		if (prune != null)
 			actualPrune = Integer.MAX_VALUE;
-		for (int i = 0; i < board.getSize(); i++) {
+		for (int row = 0; row < board.getSize(); row++) {
 			for (int j = 0; j < board.getSize(); j++) {
 				if (System.currentTimeMillis() > timeBound)
 					return null;
-				if (board.getPiece(i, j).getOwner() == state.getTurn()) {
-					possibleMoves = getPossibleMovesFrom(board, i, j);
+				if (board.getPiece(row, j).getOwner() == state.getTurn()) {
+					possibleMoves = getPossibleMovesFrom(board, row, j);
 					for (Move move : possibleMoves) {
-
 						stateAux = state.copy();
 						stateAux.move(move);
 						if (me != null) // Si es creando el arbol de llamadas
@@ -135,11 +132,11 @@ public class Minimax {
 						// System.out.println(blancos(4-depth)+"Entre: "+move);
 						Move resp = minimax(stateAux, depth - 1, actualPrune,
 								son, timeBound);
-						if (resp == null)
+						if (resp == null) //Salio por tiempo
 							return null;
 						move.setValue(-resp.getValue());
 						// System.out.println(blancos(4-depth)+"Sali: "+move);
-						if (son != null) { // Si es creando el arbol de llamadas
+						if (me != null) { // Si es creando el arbol de llamadas
 							son.setLabel(move.toString());
 							if (depth % 2 == 0)
 								son.setForm("ellipse");
@@ -153,16 +150,15 @@ public class Minimax {
 							}
 							answer = move;
 							if (answer.getValue() == Integer.MAX_VALUE) {
-								if (nodeAnswer != null)
+								if (me != null) // Si es creando el arbol de llamadas
 									nodeAnswer.setColor("salmon");
 								return answer;
 							}
 						}
 						if (prune != null) { // si es con poda
 							if (move.getValue() >= prune) {
-								if (nodeAnswer != null)
-									nodeAnswer.setColor("salmon");
 								if (me != null) { // Si es creando el arbol de llamadas
+									nodeAnswer.setColor("salmon");
 									son = new Node();
 									son.setLabel("Poda");
 									son.setColor("gray");
@@ -183,6 +179,7 @@ public class Minimax {
 		}
 		if (nodeAnswer != null)
 			nodeAnswer.setColor("salmon");
+		if(!answer.isValid()) return new Move(0); //Si no tiene movimiento devuelve un valor heuristico de 0.
 		return answer;
 	}
 	
@@ -204,12 +201,12 @@ public class Minimax {
 		int simmetricBoard = board.symmetrys();
 		Set<Move> movesDone = new HashSet<Move>();
 		
-		for (int i = 0; i < board.getSize(); i++) {
-			for (int j = 0; j < board.getSize(); j++) {
+		for (int row = 0; row < board.getSize(); row++) {
+			for (int col = 0; col < board.getSize(); col++) {
 				if (System.currentTimeMillis() > timeBound)
 					return null;
-				if (board.getPiece(i, j).getOwner() == state.getTurn()) {
-					possibleMoves = getPossibleMovesFrom(board, i, j);
+				if (board.getPiece(row, col).getOwner() == state.getTurn()) {
+					possibleMoves = getPossibleMovesFrom(board, row, col);
 					for (Move move : possibleMoves) {
 
 						stateAux = state.copy();
@@ -313,6 +310,7 @@ public class Minimax {
 		}
 		if (nodeAnswer != null)
 			nodeAnswer.setColor("salmon");
+		if(!answer.isValid()) return new Move(0); //Si no tiene movimiento devuelve un valor heuristico de 0.
 		return answer;
 	}	
 	
