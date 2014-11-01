@@ -45,11 +45,4 @@ public class King extends Piece {
 		return false;
 	}
 
-	@Override
-	public int value() {
-		return 0;
-	}
-
-	
-
 }

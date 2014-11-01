@@ -90,6 +90,57 @@ public class Board {
 		}
 		return answer;
 	}
+	
+	public int value2(){ 
+		int answer=0, guards=0, enemysTL=0, enemysTR=0, enemysBL=0, enemysBR=0;
+		
+		Piece piece;
+		for(int row=0; row<size;row++){
+			for(int col=0; col<size; col++){
+				if((piece=getPiece(row, col)).getOwner()==1){
+					if(piece==PieceManager.getKingInstance()){
+						answer+=((row-size/2)*(row-size/2)+(col-size/2)*(col-size/2))*(20.0/size);
+						//si conociese de antemano la posicion del rey, no hace falta hacer esto que OBVIO es
+						//super ineficiente y al pepe de hacer, pero asi no toco el codigo
+						for(int auxRow=0; auxRow<row; auxRow++){
+							for(int auxCol=0; auxCol<col; auxCol++){
+								if(getPiece(auxRow, auxCol).getOwner()==2)
+									enemysTL++;
+							}
+						}
+						
+						for(int auxRow=row; auxRow<size; auxRow++){
+							for(int auxCol=0; auxCol<col; auxCol++){
+								if(getPiece(auxRow, auxCol).getOwner()==2)
+									enemysBL++;
+							}
+						}
+						
+						for(int auxRow=0; auxRow<row; auxRow++){
+							for(int auxCol=col; auxCol<size; auxCol++){
+								if(getPiece(auxRow, auxCol).getOwner()==2)
+									enemysTR++;
+							}
+						}
+						
+						for(int auxRow=row; auxRow<size; auxRow++){
+							for(int auxCol=col; auxCol<size; auxCol++){
+								if(getPiece(auxRow, auxCol).getOwner()==2)
+									enemysBR++;
+							}
+						}
+						
+					}else{
+						guards++;
+					}
+				}
+			}
+		}
+		
+		answer+=16*guards - 9*(enemysBR+enemysTR+enemysTL+enemysBL) -10*Math.min(Math.min(enemysBR, enemysBL), Math.min(enemysTR, enemysTL));
+		
+		return answer; 
+	}
 
 	public Throne getThrone(){
 		return (size<12?PieceManager.getSmallThroneInstance():PieceManager.getBigThroneInstance());

@@ -21,10 +21,4 @@ public class Empty extends Piece {
 		return true;
 	}
 
-	@Override
-	public int value() {
-		return 0;
-	}
-	
-
 }
