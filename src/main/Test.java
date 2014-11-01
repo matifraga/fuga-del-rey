@@ -35,7 +35,7 @@ public class Test {
 				time = 0;
 				game.setParameters(0, depth, false);
 				time=System.currentTimeMillis();
-				game.getNextBestMove(false);
+				game.getBestNextMove(false);
 				time-=System.currentTimeMillis();
 				System.out.println("El Tablero"+j+" tardo: "+time);
 			}
