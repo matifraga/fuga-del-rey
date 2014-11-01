@@ -10,6 +10,8 @@ public class Board {
 
 	private Piece[][] board;
 	private int size;
+	private Point kingPosition;
+	private int enemyCount=0, guardCount=0;
 	
 	public Board(int n){
 		if(n<7 || n>19 || n%2==0)
@@ -24,8 +26,10 @@ public class Board {
 		return board[i][j];
 	}
 	
-	public void fillRow(String str, int n){
+	/*Devuelve si se cargo un rey o no*/
+	public boolean fillRow(String str, int n){
 		int length=str.length();
+		boolean isAKing=false;
 		Piece piece;
 		for(int i=0;i<length;i++){
 			switch (str.charAt(i)) {
@@ -34,18 +38,24 @@ public class Board {
 				break;
 			case 'N':
 				piece= PieceManager.getEnemyInstance();
+				enemyCount++;
 				break;
 			case 'G':
 				piece= PieceManager.getGuardInstance();
+				guardCount++;
 				break;
 			case 'R':
 				piece= PieceManager.getKingInstance();
+				kingPosition=new Point(n, i);
+				isAKing=true;
+				guardCount++;
 				break;
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Hay un caracter desconocido");
 			}
 			board[n][i]=piece;
 		}
+		return isAKing;
 	}
 	
 	public void putTowersAndThrone(){
@@ -67,79 +77,71 @@ public class Board {
 	}
 
 	
+	public void enemyKilled(){
+		enemyCount--;
+	}
+	
+	public void guardKilled(){
+		guardCount--;
+	}
+	
+	public void setKingPosition(int row, int col){
+		kingPosition.x=row;
+		kingPosition.y=col;
+	}
 	
 	public int getSize() {
 		return size;
 	}
 
-	public int value(){
+	public int value1(){
+		return 16*guardCount-9*enemyCount;
+	}
+	
+	public int value2(){
 		int answer=0;
-		Piece piece;
-		for(int row=0; row<size;row++){
-			for(int col=0; col<size; col++){
-				if((piece=getPiece(row, col)).getOwner()==1){
-					if(piece==PieceManager.getKingInstance()){
-						answer+=((row-size/2)*(row-size/2)+(col-size/2)*(col-size/2))*(20.0/size);
-					}						
-					answer+=16;
-				}
-				if(getPiece(row, col).getOwner()==2){
-					answer-=9;
-				}
-			}
-		}
+		int kingRow=kingPosition.x, kingCol=kingPosition.y;		
+		answer+=((kingRow-size/2)*(kingRow-size/2)+(kingCol-size/2)*(kingCol-size/2))*(20.0/size);
+		answer+=16*guardCount;
+		answer-=9*enemyCount;
 		return answer;
 	}
 	
-	public int value2(){ 
-		int answer=0, guards=0, enemysTL=0, enemysTR=0, enemysBL=0, enemysBR=0;
+	public int value3(){ 
+		int answer=0, enemysTopLeft=0, enemysTopRight=0, enemysBotLeft=0, enemysBotRight=0;
+		int kingRow=kingPosition.x, kingCol=kingPosition.y;
 		
-		Piece piece;
-		for(int row=0; row<size;row++){
-			for(int col=0; col<size; col++){
-				if((piece=getPiece(row, col)).getOwner()==1){
-					if(piece==PieceManager.getKingInstance()){
-						answer+=((row-size/2)*(row-size/2)+(col-size/2)*(col-size/2))*(20.0/size);
-						//si conociese de antemano la posicion del rey, no hace falta hacer esto que OBVIO es
-						//super ineficiente y al pepe de hacer, pero asi no toco el codigo
-						for(int auxRow=0; auxRow<row; auxRow++){
-							for(int auxCol=0; auxCol<col; auxCol++){
-								if(getPiece(auxRow, auxCol).getOwner()==2)
-									enemysTL++;
-							}
-						}
-						
-						for(int auxRow=row; auxRow<size; auxRow++){
-							for(int auxCol=0; auxCol<col; auxCol++){
-								if(getPiece(auxRow, auxCol).getOwner()==2)
-									enemysBL++;
-							}
-						}
-						
-						for(int auxRow=0; auxRow<row; auxRow++){
-							for(int auxCol=col; auxCol<size; auxCol++){
-								if(getPiece(auxRow, auxCol).getOwner()==2)
-									enemysTR++;
-							}
-						}
-						
-						for(int auxRow=row; auxRow<size; auxRow++){
-							for(int auxCol=col; auxCol<size; auxCol++){
-								if(getPiece(auxRow, auxCol).getOwner()==2)
-									enemysBR++;
-							}
-						}
-						
-					}else{
-						guards++;
-					}
-				}
+		answer+=((kingRow-size/2)*(kingRow-size/2)+(kingCol-size/2)*(kingCol-size/2))*(20.0/size);
+		
+		for(int auxRow=0; auxRow<=kingRow; auxRow++){
+			for(int auxCol=0; auxCol<=kingCol; auxCol++){
+				if(getPiece(auxRow, auxCol).getOwner()==2)
+					enemysTopLeft++;
 			}
 		}
 		
-		answer+=16*guards - 9*(enemysBR+enemysTR+enemysTL+enemysBL) -10*Math.min(Math.min(enemysBR, enemysBL), Math.min(enemysTR, enemysTL));
+		for(int auxRow=kingRow; auxRow<size; auxRow++){
+			for(int auxCol=0; auxCol<=kingCol; auxCol++){
+				if(getPiece(auxRow, auxCol).getOwner()==2)
+					enemysBotLeft++;
+			}
+		}
 		
-		return answer; 
+		for(int auxRow=0; auxRow<=kingRow; auxRow++){
+			for(int auxCol=kingCol; auxCol<size; auxCol++){
+				if(getPiece(auxRow, auxCol).getOwner()==2)
+					enemysTopRight++;
+			}
+		}
+		
+		for(int auxRow=kingRow; auxRow<size; auxRow++){
+			for(int auxCol=kingCol; auxCol<size; auxCol++){
+				if(getPiece(auxRow, auxCol).getOwner()==2)
+					enemysBotRight++;
+			}
+		}
+	answer+=16*guardCount-9*(enemyCount)-10*Math.min(Math.min(enemysBotRight, enemysBotLeft), Math.min(enemysTopRight, enemysTopLeft));
+	return answer; 
 	}
 
 	public Throne getThrone(){
@@ -147,7 +149,10 @@ public class Board {
 	}
 	
 	public void move(int xOrigin, int yOrigin, int xDest, int yDest) {
-		board[xDest][yDest]=board[xOrigin][yOrigin]; //TODO: validar
+		if(board[xOrigin][yOrigin]==PieceManager.getKingInstance()){
+			setKingPosition(xDest, yDest);
+		}
+		board[xDest][yDest]=board[xOrigin][yOrigin];
 		removePiece(xOrigin, yOrigin); 
 	}
 
@@ -162,6 +167,9 @@ public class Board {
 				board.board[row][col]=this.board[row][col];
 			}
 		}
+		board.enemyCount=this.enemyCount;
+		board.guardCount=this.guardCount;
+		board.kingPosition=this.kingPosition;
 		return board;
 	}
 

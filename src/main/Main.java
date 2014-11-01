@@ -67,12 +67,12 @@ public class Main {
 		try {
 			game.loadBoardFrom(new File(file));
 		} catch (Exception e) {
-			System.out.println("Hubo un error al abrir el archivo");
+			System.out.println(e.getMessage());
 			return;
 		}
 		if(visual)
 			game.start();
 		else
-			game.getNextBestMove(tree);
+			game.getBestNextMove(tree);
 	}
 }

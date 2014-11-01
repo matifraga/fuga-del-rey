@@ -7,6 +7,7 @@ import graphics.Drawing;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class Game {
 
 	private Board board;
 	private int turn;
-	private boolean isKingAlive=true;
+	private boolean isKingAlive;
 	private Long time=null;
 	private int depth=0;
 	private boolean prune=false;
@@ -42,19 +43,42 @@ public class Game {
 	}
 	
 	public void loadBoardFrom(File file) throws Exception{
-		FileReader fileReader= new FileReader(file);
+		FileReader fileReader;
+		try{
+			fileReader= new FileReader(file);
+		}catch(IOException e){
+			throw new IOException("No se pudo abrir el archivo");
+		}
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		String str=bufferedReader.readLine(); //Aca se lee de quien es el turno
-		turn=3-Integer.parseInt(str); //Leemos al reves los turnos
-		str=bufferedReader.readLine();
+		String str;
+		try{
+			str=bufferedReader.readLine(); //Aca se lee de quien es el turno
+			turn=3-Integer.parseInt(str); //Leemos al reves los turnos
+			str=bufferedReader.readLine();
+		}catch(IOException e){
+			throw new IOException("Hubo un error al abrir el archivo");
+		}
 		int size=str.length();
 		board=new Board(size);
 		board.fillRow(str, 0);
 		for(int i=1;i<size; i++){
-			str=bufferedReader.readLine();
-			board.fillRow(str,i);	
+			try{
+				str=bufferedReader.readLine();
+			}catch(IOException e){
+				throw new IOException("Hubo un error al abrir el archivo");
+			}
+			if(str.length()!=size){
+				throw new IllegalArgumentException("Dimensiones del tablero invalidas");
+			}
+			if(board.fillRow(str,i))
+			{
+				if(isKingAlive){
+					throw new IllegalArgumentException("Hay dos reyes en el tablero");
+				}
+				isKingAlive=true;
+			}
 		}
-		board.putTowersAndThrone();		
+		board.putTowersAndThrone();
 	}
 	
 	public void move(Move move){
@@ -63,7 +87,6 @@ public class Game {
 	
 	public void move(int xOrigin, int yOrigin, int xDest, int yDest){ //private?
 		board.move(xOrigin,yOrigin,xDest,yDest);
-		changeTurn();
 		int dx[]={1,0,-1,0};
 		int dy[]={0,1,0,-1};
 		for(int i=0; i<4; i++){
@@ -73,6 +96,12 @@ public class Game {
 					board.getPiece(xDest+dx[i]*2, yDest+dy[i]*2),
 					board.getPiece(xDest+dx[i]+dy[i], yDest+dy[i]+dx[i]),
 					board.getPiece(xDest+dx[i]-dy[i], yDest+dy[i]-dx[i]))){
+				if(turn==1){ //Se mato un enemigo
+					board.enemyKilled();
+				}else{
+					board.guardKilled();
+				}
+					
 				if(board.getPiece(xDest+dx[i], yDest+dy[i])==PieceManager.getKingInstance()){
 					isKingAlive=false;
 				}
@@ -80,6 +109,7 @@ public class Game {
 				//Aca se puede agregar algo para contabilizar las fichas atrapadas
 			}
 		}
+		changeTurn();
 		isFinished();
 	}
 	
@@ -154,7 +184,7 @@ public class Game {
 		}
 	}
 	
-	public void getNextBestMove(boolean tree){
+	public void getBestNextMove(boolean tree){
 		Move move=null;
 		if(time==null){
 			move=Minimax.minimaxByDepth(this, depth, prune, tree);
