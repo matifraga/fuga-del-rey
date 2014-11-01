@@ -25,11 +25,5 @@ public class Fighter extends Piece{
 	public boolean canBeJumpBy(Piece piece) {
 		return false;
 	}
-
-	@Override
-	public int value() {
-		return 0;
-	}
-
 	
 }

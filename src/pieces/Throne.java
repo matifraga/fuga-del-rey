@@ -21,8 +21,4 @@ public abstract class Throne extends Piece{
 	@Override
 	public abstract boolean canBeJumpBy(Piece piece);
 
-	@Override
-	public int value() {
-		return 0;
-	}
 }

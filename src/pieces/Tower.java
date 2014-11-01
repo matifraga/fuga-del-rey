@@ -23,10 +23,4 @@ public class Tower extends Piece {
 		return false;
 	}
 
-	@Override
-	public int value() {
-		return 0;
-	}
-	
-
 }

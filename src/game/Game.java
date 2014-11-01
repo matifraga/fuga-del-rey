@@ -218,9 +218,9 @@ public class Game {
 	public int value(){
 		switch (turn) {
 		case 1:
-			return board.value();
+			return board.value2();
 		case 2:
-			return -board.value();
+			return -board.value2();
 		case 10:
 			return Integer.MIN_VALUE+1;
 		case 20:
