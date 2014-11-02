@@ -117,6 +117,9 @@ public class Game {
 	
 	public boolean canMove(int xOrigin, int yOrigin, int xDest, int yDest){ 
 		Piece pieceToMove=board.getPiece(xOrigin, yOrigin);
+		if(pieceToMove.getOwner()!=turn){
+			return false;
+		}
 		if(board.getPiece(xDest, yDest).canBeStepBy(pieceToMove)){
 			if((xOrigin!=xDest && yOrigin==yDest) || (xOrigin==xDest && yOrigin!=yDest)){
 				if(checkEmptyPath(pieceToMove,xOrigin,yOrigin,xDest-xOrigin,yDest-yOrigin)){
