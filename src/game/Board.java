@@ -47,6 +47,9 @@ public class Board {
 			case 'R':
 				piece= PieceManager.getKingInstance();
 				kingPosition=new Point(n, i);
+				if(isAKing){
+					throw new IllegalArgumentException("Hay dos reyes en tablero");
+				}
 				isAKing=true;
 				guardCount++;
 				break;
