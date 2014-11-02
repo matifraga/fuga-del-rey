@@ -76,6 +76,7 @@ public class Game {
 			}
 		}
 		board.putTowersAndThrone();
+		bufferedReader.close();
 	}
 	
 	public void move(Move move){
