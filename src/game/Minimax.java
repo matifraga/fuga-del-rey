@@ -103,7 +103,7 @@ public class Minimax {
 		return move;
 	}
 
-	public static Move minimax2(Game state, int depth, Integer prune, Node me,
+	public static Move minimax(Game state, int depth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == 0 || state.getTurn() > 2) {
 			return new Move(state.value());
@@ -180,7 +180,7 @@ public class Minimax {
 	}
 	
 	
-	public static Move minimax(Game state, int depth, Integer prune, Node me,
+	public static Move minimax2(Game state, int depth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == 0 || state.getTurn() > 2) {
 			return new Move(state.value());
