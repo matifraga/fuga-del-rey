@@ -57,7 +57,7 @@ public class Game {
 		}
 		int size=str.length();
 		board=new Board(size);
-		board.fillRow(str, 0);
+		isKingAlive=board.fillRow(str, 0);
 		for(int i=1;i<size; i++){
 			try{
 				str=bufferedReader.readLine();
