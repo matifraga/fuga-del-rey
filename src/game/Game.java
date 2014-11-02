@@ -116,29 +116,10 @@ public class Game {
 	}
 	
 	public boolean canMove(int xOrigin, int yOrigin, int xDest, int yDest){ 
-		Piece pieceToMove=board.getPiece(xOrigin, yOrigin);
-		if(pieceToMove.getOwner()!=turn){
+		if(board.getPiece(xOrigin, yOrigin).getOwner()!=turn){
 			return false;
 		}
-		if(board.getPiece(xDest, yDest).canBeStepBy(pieceToMove)){
-			if((xOrigin!=xDest && yOrigin==yDest) || (xOrigin==xDest && yOrigin!=yDest)){
-				if(checkEmptyPath(pieceToMove,xOrigin,yOrigin,xDest-xOrigin,yDest-yOrigin)){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	
-	private boolean checkEmptyPath(Piece pieceToMove, int xOrigin, int yOrigin, int dirX, int dirY) {
-		int uniX=(dirX==0?0:(dirX>0?1:-1)); //Indica la direccion en X
-		int uniY=(dirY==0?0:(dirY>0?1:-1)); //Indica la direccion en Y
-		for(int i=1; i<dirX+dirY;i++){
-			if(!board.getPiece(xOrigin+i*uniX, yOrigin+i*uniY).canBeJumpBy(pieceToMove))
-				return false;
-		}
-		return true;
+		return board.canMove(xOrigin,yOrigin,xDest,yDest);
 	}
 
 	/*

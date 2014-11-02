@@ -61,6 +61,8 @@ public class Board {
 		return isAKing;
 	}
 	
+	
+	
 	public void putTowersAndThrone(){
 		putTower(0,0);
 		putTower(0,size-1);
@@ -158,6 +160,29 @@ public class Board {
 		board[xDest][yDest]=board[xOrigin][yOrigin];
 		removePiece(xOrigin, yOrigin); 
 	}
+	
+	public boolean canMove(int xOrigin, int yOrigin, int xDest, int yDest){
+		Piece pieceToMove = getPiece(xOrigin, yOrigin);
+		if(getPiece(xDest, yDest).canBeStepBy(pieceToMove)){
+			if((xOrigin!=xDest && yOrigin==yDest) || (xOrigin==xDest && yOrigin!=yDest)){
+				if(checkEmptyPath(pieceToMove,xOrigin,yOrigin,xDest-xOrigin,yDest-yOrigin)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean checkEmptyPath(Piece pieceToMove, int xOrigin, int yOrigin, int dirX, int dirY) {
+		int uniX=(dirX==0?0:(dirX>0?1:-1)); //Indica la direccion en X
+		int uniY=(dirY==0?0:(dirY>0?1:-1)); //Indica la direccion en Y
+		for(int i=1; i<dirX+dirY;i++){
+			if(!getPiece(xOrigin+i*uniX, yOrigin+i*uniY).canBeJumpBy(pieceToMove))
+				return false;
+		}
+		return true;
+	}
+	
 
 	public void removePiece(int row, int col) {
 		board[row][col]=(row==size/2 && col==size/2)?getThrone():PieceManager.getEmptyInstance();
