@@ -10,6 +10,8 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
+import pieces.PieceManager;
+
 
 public class Drawing extends JPanel {
 
@@ -36,10 +38,11 @@ public class Drawing extends JPanel {
 					g2d.setColor(Color.WHITE);
 				g2d.fillRect(squareSize * j, squareSize * i,
 						squareSize, squareSize);
-				//TODO: Tenemos que ver que hacemos con el Empty.png
-				g2d.drawImage(
-						Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
-						squareSize * j,squareSize * i, this);
+				if(board.getPiece(i, j)!=PieceManager.getEmptyInstance()){ 
+					g2d.drawImage(
+							Toolkit.getDefaultToolkit().getImage("images/" + board.getPiece(i, j).getName()+ ".png"),
+							squareSize * j,squareSize * i, this);
+				}
 			}
 		}
 		if(clickManager.getSquareClicked()!=null){

@@ -17,17 +17,15 @@ public class Minimax {
 		List<Move> answer = new LinkedList<Move>();
 		Piece piece;
 		Piece pieceToMove = board.getPiece(row, col);
-		for (int i = 0; i < 4; i++) {
-			int dMove = 1;
-			while ((piece = board.getPiece(row + dx[i] * dMove, col + dy[i] * dMove)) != null
-					&& piece.canBeJumpBy(pieceToMove)) {
+		for (int i = 0; i < 4; i++) { //Direcciones del movimiento
+			for(int step=1;(piece=board.getPiece(row+dx[i]*step,col+dy[i]*step))!=null;step++) { //Si no esta en el borde del tablero
+				
 				if (piece.canBeStepBy(pieceToMove)) {
-					answer.add(new Move(row, col, row + dx[i] * dMove, col + dy[i] * dMove));
+					answer.add(new Move(row, col, row + dx[i] * step, col + dy[i] * step));
 				}
-				dMove++;
-			}
-			if (piece != null && piece.canBeStepBy(pieceToMove)) {
-				answer.add(new Move(row, col, row + dx[i] * dMove, col + dy[i] * dMove));
+				if(!piece.canBeJumpBy(pieceToMove)){
+					break;
+				}
 			}
 		}
 		return answer;
@@ -129,13 +127,11 @@ public class Minimax {
 						stateAux.move(move);
 						if (me != null) // Si es creando el arbol de llamadas
 							son = new Node();
-						// System.out.println(blancos(4-depth)+"Entre: "+move);
 						Move resp = minimax(stateAux, depth - 1, actualPrune,
 								son, timeBound);
 						if (resp == null) //Salio por tiempo
 							return null;
 						move.setValue(-resp.getValue());
-						// System.out.println(blancos(4-depth)+"Sali: "+move);
 						if (me != null) { // Si es creando el arbol de llamadas
 							son.setLabel(move.toString());
 							if (depth % 2 == 0)
@@ -255,14 +251,12 @@ public class Minimax {
 							Move resp=null;
 							if (me != null) // Si es creando el arbol de llamadas
 								son = new Node();
-							// System.out.println(blancos(4-depth)+"Entre: "+move);
 							resp = minimax(stateAux, depth - 1, actualPrune,
 									son, timeBound);
 							if (resp == null)
-								return null;
-							
+								return null;	
 							move.setValue(-resp.getValue());
-							// System.out.println(blancos(4-depth)+"Sali: "+move);
+								
 							if (son != null) { // Si es creando el arbol de llamadas
 								son.setLabel(move.toString());
 								if (depth % 2 == 0)
@@ -314,12 +308,4 @@ public class Minimax {
 		return answer;
 	}	
 	
-	// para debugear
-	private static String blancos(int a) {
-		String b = "";
-		for (int i = 0; i < a; i++) {
-			b += "\t";
-		}
-		return b;
-	}
 }
