@@ -99,7 +99,7 @@ public class Minimax {
 			File closeFile = new File("treeAux.dot");
 			closeFile.delete();
 		}
-		// System.out.println(timeBound-System.currentTimeMillis()+" "+depth);
+		System.out.println(timeBound-System.currentTimeMillis()+" "+(depth-2));
 		return move;
 	}
 
