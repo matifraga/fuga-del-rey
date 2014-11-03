@@ -43,14 +43,11 @@ public class Minimax {
 			}
 			start=new Node();
 		}
-		answer=Minimax.minimax(state,depth,(prune?Integer.MAX_VALUE:null),start,Long.MAX_VALUE);
+		answer=Minimax.minimax(state,0,depth,(prune?Integer.MAX_VALUE:null),start,Long.MAX_VALUE);
 		if(tree){
 			start.setLabel("START "+(state.getTurn()==1?answer.getValue():-answer.getValue()));
 			start.setColor("salmon");
-			if (state.getTurn() == 1)
-				start.setForm("ellipse");
-			else
-				start.setForm("box");
+			start.setForm("box");
 			try {
 				Node.close();
 			} catch (Exception e) {
@@ -77,16 +74,13 @@ public class Minimax {
 				}
 				start = new Node();
 			}
-			auxMove = minimax(state, depth++, (prune?Integer.MAX_VALUE:null), start, timeBound);			
+			auxMove = minimax(state,0, depth++, (prune?Integer.MAX_VALUE:null), start, timeBound);			
 			if (auxMove != null) {
 				move = auxMove;
 				if (tree) {
 					start.setLabel("START "+(state.getTurn()==1?move.getValue():-move.getValue()));
 					start.setColor("salmon");
-					if (state.getTurn() == 1)
-						start.setForm("ellipse");
-					else
-						start.setForm("box");
+					start.setForm("box");
 					try {
 						Node.close();
 					} catch (Exception e) {
@@ -111,9 +105,9 @@ public class Minimax {
 		return move;
 	}
 
-	public static Move minimax2(Game state, int depth, Integer prune, Node me,
+	public static Move minimax2(Game state, int depth, int maxDepth, Integer prune, Node me,
 			Long timeBound) {
-		if (depth == 0 || state.getTurn() > 2) {
+		if (depth == maxDepth || state.getTurn() > 2) {
 			return new Move(state.value());
 		}
 		Board board = state.getBoard();
@@ -136,16 +130,12 @@ public class Minimax {
 						if (me != null) // Si es creando el arbol de llamadas
 							son = new Node();
 						
-						Move resp = minimax(stateAux, depth-1, actualPrune,	son, timeBound);
+						Move resp = minimax(stateAux, depth+1,maxDepth, actualPrune, son, timeBound);
 						if (resp == null) //Salio por tiempo
 							return null;
 						move.setValue(-resp.getValue()); //Intercambia entre MAX y MIN
 						if (me != null) { // Si es creando el arbol de llamadas
-							son.setLabelMove(move, state.getTurn()==2);
-							if (state.getTurn() == 2)
-								son.setForm("ellipse");
-							else
-								son.setForm("box");
+							son.setLabelMove(move, depth%2==1); //En los nodos de profundidad impar imprimimos su valor opuesto
 							me.link(son);
 						}
 						if (move.getValue() > answer.getValue()) {
@@ -160,7 +150,7 @@ public class Minimax {
 										son = new Node();
 										son.setLabel("Poda");
 										son.setColor("gray");
-										if (state.getTurn() == 2)
+										if (depth%2==1)
 											son.setForm("ellipse");
 										else
 											son.setForm("box");
@@ -189,9 +179,9 @@ public class Minimax {
 	}
 	
 	
-	public static Move minimax(Game state, int depth, Integer prune, Node me,
+	public static Move minimax(Game state, int depth,int maxDepth, Integer prune, Node me,
 			Long timeBound) {
-		if (depth == 0 || state.getTurn() > 2) {
+		if (depth == maxDepth || state.getTurn() > 2) {
 			return new Move(state.value());
 		}
 		Board board = state.getBoard();
@@ -260,18 +250,13 @@ public class Minimax {
 							Move resp=null;
 							if (me != null) // Si es creando el arbol de llamadas
 								son = new Node();
-							resp = minimax(stateAux, depth - 1, actualPrune,
-									son, timeBound);
+							resp = minimax(stateAux, depth+1,maxDepth, actualPrune, son, timeBound);
 							if (resp == null)
 								return null;	
 							move.setValue(-resp.getValue());
 								
 							if (son != null) { // Si es creando el arbol de llamadas
-								son.setLabelMove(move, state.getTurn()==2);
-								if (state.getTurn() == 2)
-									son.setForm("ellipse");
-								else
-									son.setForm("box");
+								son.setLabelMove(move, depth%2==1); //En los nodos de profundidad impar imprimimos su valor opuesto
 								me.link(son);
 							}
 							if (move.getValue() > answer.getValue()) {
@@ -286,7 +271,7 @@ public class Minimax {
 											son = new Node();
 											son.setLabel("Poda");
 											son.setColor("gray");
-											if (state.getTurn() == 2)
+											if (depth%2==0)
 												son.setForm("ellipse");
 											else
 												son.setForm("box");

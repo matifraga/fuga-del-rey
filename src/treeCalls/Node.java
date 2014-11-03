@@ -47,10 +47,18 @@ public class Node {
 		System.out.println();
 	}*/
 	
+	/*Imprime el move con su valor real*/
 	public void setLabelMove(Move move, boolean invert){
 		int realValue=move.getValue();
-		if(invert)
+		if(invert){ 
 			realValue*=-1;
+			setForm("box");
+		}
+		else
+		{
+			setForm("ellipse");
+		}
+			
 		try{
 			bufferedWriter.write(name+" [label=\""+move.toString()+" "+realValue+"\"]\n");
 			}catch(Exception e){
