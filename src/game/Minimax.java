@@ -45,8 +45,12 @@ public class Minimax {
 		}
 		answer=Minimax.minimax(state,depth,(prune?Integer.MAX_VALUE:null),start,Long.MAX_VALUE);
 		if(tree){
-			start.setLabel("START "+answer.getValue());
+			start.setLabel("START "+(state.getTurn()==1?answer.getValue():-answer.getValue()));
 			start.setColor("salmon");
+			if (state.getTurn() == 1)
+				start.setForm("ellipse");
+			else
+				start.setForm("box");
 			try {
 				Node.close();
 			} catch (Exception e) {
@@ -77,8 +81,12 @@ public class Minimax {
 			if (auxMove != null) {
 				move = auxMove;
 				if (tree) {
-					start.setLabel("START " + move.getValue());
+					start.setLabel("START "+(state.getTurn()==1?move.getValue():-move.getValue()));
 					start.setColor("salmon");
+					if (state.getTurn() == 1)
+						start.setForm("ellipse");
+					else
+						start.setForm("box");
 					try {
 						Node.close();
 					} catch (Exception e) {
@@ -103,7 +111,7 @@ public class Minimax {
 		return move;
 	}
 
-	public static Move minimax(Game state, int depth, Integer prune, Node me,
+	public static Move minimax2(Game state, int depth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == 0 || state.getTurn() > 2) {
 			return new Move(state.value());
@@ -117,24 +125,24 @@ public class Minimax {
 		if (prune != null)
 			actualPrune = Integer.MAX_VALUE;
 		for (int row = 0; row < board.getSize(); row++) {
-			for (int j = 0; j < board.getSize(); j++) {
+			for (int col = 0; col < board.getSize(); col++) {
 				if (System.currentTimeMillis() > timeBound)
 					return null;
-				if (board.getPiece(row, j).getOwner() == state.getTurn()) {
-					possibleMoves = getPossibleMovesFrom(board, row, j);
+				if (board.getPiece(row, col).getOwner() == state.getTurn()) {
+					possibleMoves = getPossibleMovesFrom(board, row, col);
 					for (Move move : possibleMoves) {
 						stateAux = state.copy();
 						stateAux.move(move);
 						if (me != null) // Si es creando el arbol de llamadas
 							son = new Node();
-						Move resp = minimax(stateAux, depth - 1, actualPrune,
-								son, timeBound);
+						
+						Move resp = minimax(stateAux, depth-1, actualPrune,	son, timeBound);
 						if (resp == null) //Salio por tiempo
 							return null;
-						move.setValue(-resp.getValue());
+						move.setValue(-resp.getValue()); //Intercambia entre MAX y MIN
 						if (me != null) { // Si es creando el arbol de llamadas
-							son.setLabel(move.toString());
-							if (depth % 2 == 0)
+							son.setLabelMove(move, state.getTurn()==2);
+							if (state.getTurn() == 2)
 								son.setForm("ellipse");
 							else
 								son.setForm("box");
@@ -145,28 +153,29 @@ public class Minimax {
 								nodeAnswer = son;
 							}
 							answer = move;
-							if (answer.getValue() == Integer.MAX_VALUE) {
-								if (me != null) // Si es creando el arbol de llamadas
-									nodeAnswer.setColor("salmon");
-								return answer;
-							}
-						}
-						if (prune != null) { // si es con poda
-							if (move.getValue() >= prune) {
-								if (me != null) { // Si es creando el arbol de llamadas
-									nodeAnswer.setColor("salmon");
-									son = new Node();
-									son.setLabel("Poda");
-									son.setColor("gray");
-									if (depth % 2 == 0)
-										son.setForm("ellipse");
-									else
-										son.setForm("box");
-									me.link(son);
+							if (prune != null) { // si es con poda
+								if (answer.getValue() >= prune) {
+									if (me != null) { // Si es creando el arbol de llamadas
+										nodeAnswer.setColor("salmon");
+										son = new Node();
+										son.setLabel("Poda");
+										son.setColor("gray");
+										if (state.getTurn() == 2)
+											son.setForm("ellipse");
+										else
+											son.setForm("box");
+										me.link(son);
+									}
+									return answer;
+								} else {
+									actualPrune = -answer.getValue();
 								}
+							}
+							
+							if (answer.getValue() == Integer.MAX_VALUE) {
+								if (nodeAnswer != null)
+									nodeAnswer.setColor("salmon");
 								return answer;
-							} else {
-								actualPrune = -answer.getValue();
 							}
 						}
 					}
@@ -180,7 +189,7 @@ public class Minimax {
 	}
 	
 	
-	public static Move minimax2(Game state, int depth, Integer prune, Node me,
+	public static Move minimax(Game state, int depth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == 0 || state.getTurn() > 2) {
 			return new Move(state.value());
@@ -258,8 +267,8 @@ public class Minimax {
 							move.setValue(-resp.getValue());
 								
 							if (son != null) { // Si es creando el arbol de llamadas
-								son.setLabel(move.toString());
-								if (depth % 2 == 0)
+								son.setLabelMove(move, state.getTurn()==2);
+								if (state.getTurn() == 2)
 									son.setForm("ellipse");
 								else
 									son.setForm("box");
@@ -270,34 +279,32 @@ public class Minimax {
 									nodeAnswer = son;
 								}
 								answer = move;
+								if (prune != null) { // si es con poda
+									if (answer.getValue() >= prune) {
+										if (me != null) { // Si es creando el arbol de llamadas
+											nodeAnswer.setColor("salmon");
+											son = new Node();
+											son.setLabel("Poda");
+											son.setColor("gray");
+											if (state.getTurn() == 2)
+												son.setForm("ellipse");
+											else
+												son.setForm("box");
+											me.link(son);
+										}
+										return answer;
+									} else {
+										actualPrune = -answer.getValue();
+									}
+								}
+								
 								if (answer.getValue() == Integer.MAX_VALUE) {
 									if (nodeAnswer != null)
 										nodeAnswer.setColor("salmon");
 									return answer;
 								}
 							}
-							if (prune != null) { // si es con poda
-								if (move.getValue() >= prune) {
-									if (nodeAnswer != null)
-										nodeAnswer.setColor("salmon");
-									if (me != null) { // Si es creando el arbol de llamadas
-										son = new Node();
-										son.setLabel("Poda");
-										son.setColor("gray");
-										if (depth % 2 == 0)
-											son.setForm("ellipse");
-										else
-											son.setForm("box");
-										me.link(son);
-									}
-									return answer;
-								} else {
-									actualPrune = -answer.getValue();
-								}
-							}
-						}
-						
-						
+						}						
 					}
 				}
 			}

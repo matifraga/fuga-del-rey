@@ -177,7 +177,7 @@ public class Game {
 			System.out.println("No hay movimientos posibles");
 			this.turn=15; //No es el turno de nadie, el juego termina
 		}
-		System.out.println("El mejor movimiento posible es: "+move.moveString());
+		System.out.println("El mejor movimiento posible es: "+move);
 	}
 
 	public int getTurn(){

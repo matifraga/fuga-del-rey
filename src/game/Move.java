@@ -39,16 +39,12 @@ public class Move {
 	public void setValue(int value) {
 		this.value = value;
 	}
-	
-	public String toString(){
-		return "("+xOrigin+","+yOrigin+")("+xDest+","+yDest+") "+value;
-	}
-	
+		
 	public int getValue(){
 		return value;
 	}
 	
-	public String moveString(){
+	public String toString(){
 		return "("+xOrigin+","+yOrigin+")("+xDest+","+yDest+")";
 	}
 	

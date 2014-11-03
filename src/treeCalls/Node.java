@@ -1,5 +1,7 @@
 package treeCalls;
 
+import game.Move;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -44,6 +46,18 @@ public class Node {
 	public void setName(String name) {
 		System.out.println();
 	}*/
+	
+	public void setLabelMove(Move move, boolean invert){
+		int realValue=move.getValue();
+		if(invert)
+			realValue*=-1;
+		try{
+			bufferedWriter.write(name+" [label=\""+move.toString()+" "+realValue+"\"]\n");
+			}catch(Exception e){
+				System.out.println("Error al querer escribir el tree.dot");
+			}
+	}
+	
 	public void setLabel(String str) {
 		try{
 		bufferedWriter.write(name+" [label=\""+str+"\"]\n");
