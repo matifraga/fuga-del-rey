@@ -210,7 +210,7 @@ public class Board {
 	 * 6: simetrico respecto a la diagonal secundaria
 	 */
 	/*Queda para emprolijar codigo*/
-	public int symmetrys() {
+	public int symmetries() {
 		int answer=0x3F; /*0111 1111*/
 		Point point;	
 		

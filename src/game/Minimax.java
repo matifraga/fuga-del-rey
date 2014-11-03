@@ -109,7 +109,7 @@ public class Minimax {
 	
 	
 	
-	public static Move minimax2(Game state, int depth, int maxDepth, Integer prune, Node me,
+	public static Move minimax(Game state, int depth, int maxDepth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == maxDepth || state.getTurn() > 2) {
 			return new Move(state.value());
@@ -183,7 +183,7 @@ public class Minimax {
 	}
 	
 	
-	public static Move minimax(Game state, int depth,int maxDepth, Integer prune, Node me,
+	public static Move minimax2(Game state, int depth,int maxDepth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == maxDepth || state.getTurn() > 2) {
 			return new Move(state.value());
@@ -197,7 +197,7 @@ public class Minimax {
 		if (prune != null)
 			actualPrune = Integer.MAX_VALUE;
 		
-		int simmetricBoard = board.symmetrys();
+		int simmetricBoard = board.symmetries();
 		Set<Move> movesDone = new HashSet<Move>();
 		
 		for (int row = 0; row < board.getSize(); row++) {
