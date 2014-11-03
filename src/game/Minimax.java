@@ -11,7 +11,7 @@ import treeCalls.Node;
 
 public class Minimax {
 
-	public static List<Move> getPossibleMovesFrom(Board board, int row, int col) {
+	public static List<Move> getPossiblesMovesFrom(Board board, int row, int col) {
 		int dx[] = { 1, 0, -1, 0 };
 		int dy[] = { 0, 1, 0, -1 };
 		List<Move> answer = new LinkedList<Move>();
@@ -127,7 +127,7 @@ public class Minimax {
 				if (System.currentTimeMillis() > timeBound)
 					return null;
 				if (board.getPiece(row, col).getOwner() == state.getTurn()) {
-					possibleMoves = getPossibleMovesFrom(board, row, col);
+					possibleMoves = getPossiblesMovesFrom(board, row, col);
 					for (Move move : possibleMoves) {
 						stateAux = state.copy();
 						stateAux.move(move);
@@ -205,7 +205,7 @@ public class Minimax {
 				if (System.currentTimeMillis() > timeBound)
 					return null;
 				if (board.getPiece(row, col).getOwner() == state.getTurn()) {
-					possibleMoves = getPossibleMovesFrom(board, row, col);
+					possibleMoves = getPossiblesMovesFrom(board, row, col);
 					for (Move move : possibleMoves) {
 
 						stateAux = state.copy();
