@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
-import pieces.Piece;
 import pieces.PieceManager;
 
 public class Game {
