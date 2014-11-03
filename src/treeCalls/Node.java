@@ -47,7 +47,7 @@ public class Node {
 		System.out.println();
 	}*/
 	
-	/*Imprime el move con su valor real*/
+	/*Imprime el move con su valor real (invirtiendo su valor si era MIN)*/
 	public void setLabelMove(Move move, boolean invert){
 		int realValue=move.getValue();
 		if(invert){ 

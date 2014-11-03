@@ -45,7 +45,7 @@ public class Minimax {
 		}
 		answer=Minimax.minimax(state,0,depth,(prune?Integer.MAX_VALUE:null),start,Long.MAX_VALUE);
 		if(tree){
-			start.setLabel("START "+(state.getTurn()==1?answer.getValue():-answer.getValue()));
+			start.setLabel("START "+answer.getValue());
 			start.setColor("salmon");
 			start.setForm("box");
 			try {
@@ -78,7 +78,7 @@ public class Minimax {
 			if (auxMove != null) {
 				move = auxMove;
 				if (tree) {
-					start.setLabel("START "+(state.getTurn()==1?move.getValue():-move.getValue()));
+					start.setLabel("START "+move.getValue());
 					start.setColor("salmon");
 					start.setForm("box");
 					try {
@@ -105,6 +105,10 @@ public class Minimax {
 		return move;
 	}
 
+	
+	
+	
+	
 	public static Move minimax2(Game state, int depth, int maxDepth, Integer prune, Node me,
 			Long timeBound) {
 		if (depth == maxDepth || state.getTurn() > 2) {
@@ -150,7 +154,7 @@ public class Minimax {
 										son = new Node();
 										son.setLabel("Poda");
 										son.setColor("gray");
-										if (depth%2==1)
+										if (depth%2==0)
 											son.setForm("ellipse");
 										else
 											son.setForm("box");

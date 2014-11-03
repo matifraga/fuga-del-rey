@@ -197,7 +197,7 @@ public class Board {
 		}
 		board.enemyCount=this.enemyCount;
 		board.guardCount=this.guardCount;
-		board.kingPosition=this.kingPosition;
+		board.kingPosition=(Point)this.kingPosition.clone();
 		return board;
 	}
 
