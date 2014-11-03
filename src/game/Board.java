@@ -1,6 +1,8 @@
 package game;
 
 import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
 
 import pieces.Piece;
 import pieces.PieceManager;
@@ -199,6 +201,27 @@ public class Board {
 		board.guardCount=this.guardCount;
 		board.kingPosition=(Point)this.kingPosition.clone();
 		return board;
+	}
+	
+
+	public List<Move> getPossibleMovesFrom(int row, int col) {
+		int dx[] = { 1, 0, -1, 0 };
+		int dy[] = { 0, 1, 0, -1 };
+		List<Move> answer = new LinkedList<Move>();
+		Piece piece;
+		Piece pieceToMove = getPiece(row, col);
+		for (int i = 0; i < 4; i++) { //Direcciones del movimiento
+			for(int step=1;(piece=getPiece(row+dx[i]*step,col+dy[i]*step))!=null;step++) { //Si no esta en el borde del tablero
+				
+				if (piece.canBeStepBy(pieceToMove)) {
+					answer.add(new Move(row, col, row + dx[i] * step, col + dy[i] * step));
+				}
+				if(!piece.canBeJumpBy(pieceToMove)){
+					break;
+				}
+			}
+		}
+		return answer;
 	}
 
 	/* devuelve una mascara de bits 654321:

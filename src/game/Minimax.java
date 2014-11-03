@@ -11,25 +11,6 @@ import treeCalls.Node;
 
 public class Minimax {
 
-	public static List<Move> getPossibleMovesFrom(Board board, int row, int col) {
-		int dx[] = { 1, 0, -1, 0 };
-		int dy[] = { 0, 1, 0, -1 };
-		List<Move> answer = new LinkedList<Move>();
-		Piece piece;
-		Piece pieceToMove = board.getPiece(row, col);
-		for (int i = 0; i < 4; i++) { //Direcciones del movimiento
-			for(int step=1;(piece=board.getPiece(row+dx[i]*step,col+dy[i]*step))!=null;step++) { //Si no esta en el borde del tablero
-				
-				if (piece.canBeStepBy(pieceToMove)) {
-					answer.add(new Move(row, col, row + dx[i] * step, col + dy[i] * step));
-				}
-				if(!piece.canBeJumpBy(pieceToMove)){
-					break;
-				}
-			}
-		}
-		return answer;
-	}
 
 	public static Move minimaxByDepth(Game state, int depth, boolean prune,
 			boolean tree) {
@@ -127,7 +108,7 @@ public class Minimax {
 				if (System.currentTimeMillis() > timeBound)
 					return null;
 				if (board.getPiece(row, col).getOwner() == state.getTurn()) {
-					possibleMoves = getPossibleMovesFrom(board, row, col);
+					possibleMoves = board.getPossibleMovesFrom(row, col);
 					for (Move move : possibleMoves) {
 						stateAux = state.copy();
 						stateAux.move(move);
@@ -205,7 +186,7 @@ public class Minimax {
 				if (System.currentTimeMillis() > timeBound)
 					return null;
 				if (board.getPiece(row, col).getOwner() == state.getTurn()) {
-					possibleMoves = getPossibleMovesFrom(board, row, col);
+					possibleMoves = board.getPossibleMovesFrom(row, col);
 					for (Move move : possibleMoves) {
 
 						stateAux = state.copy();
