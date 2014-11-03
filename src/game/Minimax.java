@@ -213,43 +213,44 @@ public class Minimax {
 						
 						//checkear segun el bit, si esta en el set, si esta no lo hago						
 						boolean flag=true;
-						
-						if((simmetricBoard&1)==1){
-							if(movesDone.contains(move.rotated90(board)) || movesDone.contains(move.rotated270(board))){
-								flag=false;
+						if(simmetricBoard>0){
+							if((simmetricBoard&1)==1){
+								if(movesDone.contains(move.rotated90(board)) || movesDone.contains(move.rotated270(board))){
+									flag=false;
+								}
 							}
-						}
-						
-						if(flag && (simmetricBoard&2)==2){
-							if(movesDone.contains(move.rotated180(board))){
-								flag=false;
+							
+							if(flag && (simmetricBoard&2)==2){
+								if(movesDone.contains(move.rotated180(board))){
+									flag=false;
+								}
 							}
-						}
-						
-						if(flag && (simmetricBoard&4)==4){
-							if(movesDone.contains(move.xSymmetric(board))){
-								flag=false;
+							
+							if(flag && (simmetricBoard&4)==4){
+								if(movesDone.contains(move.xSymmetric(board))){
+									flag=false;
+								}
 							}
-						}
-						
-						if(flag && (simmetricBoard&8)==8){
-							if(movesDone.contains(move.ySymmetric(board))){
-								flag=false;
+							
+							if(flag && (simmetricBoard&8)==8){
+								if(movesDone.contains(move.ySymmetric(board))){
+									flag=false;
+								}
 							}
-						}
-						
-						if(flag && (simmetricBoard&16)==16){
-							if(movesDone.contains(move.firstDiagSymmetric(board))){
-								flag=false;
+							
+							if(flag && (simmetricBoard&16)==16){
+								if(movesDone.contains(move.firstDiagSymmetric(board))){
+									flag=false;
+								}
 							}
-						}
-						
-						if(flag && (simmetricBoard&32)==32){
-							if(movesDone.contains(move.secondDiagSymmetric(board))){
-								flag=false;
+							
+							if(flag && (simmetricBoard&32)==32){
+								if(movesDone.contains(move.secondDiagSymmetric(board))){
+									flag=false;
+								}
 							}
+							movesDone.add(move);
 						}
-						movesDone.add(move);
 						if(flag){
 							Move resp=null;
 							if (me != null) // Si es creando el arbol de llamadas
