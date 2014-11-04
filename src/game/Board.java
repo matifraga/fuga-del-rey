@@ -224,13 +224,13 @@ public class Board {
 		return answer;
 	}
 
-	/* devuelve una mascara de bits 654321:
-	 * 1: igual tablero al rotarlo 90 grados a la derecha
-	 * 2: igual tablero al rotarlo 180 grados
-	 * 3: simetrico respecto a x
-	 * 4: simetrico respecto a y
-	 * 5: simetrico respecto a la diagonal principal
-	 * 6: simetrico respecto a la diagonal secundaria
+	/* devuelve una mascara de bits:
+	 * 000001: igual tablero al rotarlo 90 grados a la derecha
+	 * 000010: igual tablero al rotarlo 180 grados
+	 * 000100: simetrico respecto a x
+	 * 001000: simetrico respecto a y
+	 * 010000: simetrico respecto a la diagonal principal
+	 * 100000: simetrico respecto a la diagonal secundaria
 	 */
 	/*Queda para emprolijar codigo*/
 	public int symmetries() {

@@ -15,9 +15,6 @@ import pieces.PieceManager;
 
 public class Drawing extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Game game;

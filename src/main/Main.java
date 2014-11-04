@@ -51,7 +51,6 @@ public class Main {
 						throw new Exception();
 					tree=true;
 				} else
-					//Parametro invalido
 					throw new Exception();
 			}
 			

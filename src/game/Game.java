@@ -82,7 +82,7 @@ public class Game {
 		move(move.xOrigin,move.yOrigin,move.xDest,move.yDest);
 	}
 	
-	public void move(int xOrigin, int yOrigin, int xDest, int yDest){ //private?
+	public void move(int xOrigin, int yOrigin, int xDest, int yDest){ 
 		board.move(xOrigin,yOrigin,xDest,yDest);
 		int dx[]={1,0,-1,0};
 		int dy[]={0,1,0,-1};
@@ -103,7 +103,6 @@ public class Game {
 					isKingAlive=false;
 				}
 				board.removePiece(xDest+dx[i],yDest+dy[i]);
-				//Aca se puede agregar algo para contabilizar las fichas atrapadas
 			}
 		}
 		changeTurn();

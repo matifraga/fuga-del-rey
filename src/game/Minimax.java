@@ -76,7 +76,7 @@ public class Minimax {
 			} catch (Exception e) {
 				System.out.println("Hubo un error al cerrar el tree.dot");
 			}
-			// elimino el treeAux
+			// Se elimina TreeAux.dot
 			File closeFile = new File("treeAux.dot");
 			closeFile.delete();
 		}
@@ -190,7 +190,7 @@ public class Minimax {
 						stateAux = state.copy();
 						stateAux.move(move);
 						
-						//checkear segun el bit, si esta en el set, si esta no lo hago						
+						//checkea segun el bit, si esta en el set, si esta no lo hago						
 						boolean flag=true;
 						if(simmetricBoard>0){
 							if((simmetricBoard&1)==1){
@@ -234,7 +234,7 @@ public class Minimax {
 							Move resp=null;
 							if (me != null) // Si es creando el arbol de llamadas
 								son = new Node();
-							resp = minimax(stateAux, depth+1,maxDepth, actualPrune, son, timeBound);
+							resp = minimax2(stateAux, depth+1,maxDepth, actualPrune, son, timeBound);
 							if (resp == null)
 								return null;	
 							move.setValue(-resp.getValue());

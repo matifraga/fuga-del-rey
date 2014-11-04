@@ -4,13 +4,7 @@ import java.io.File;
 
 import game.Game;
 
-public class TestDepth {
-	
-	/** 
-	 * Heuristica: Ir a Game, metodo value y modificar el metodo llamado alli por value1, value2 o value3
-	 * Poda por simetrias: Ir a Minimax y cambiar los nombres de los metodos minimax por minimax2 y viseversa
-	 */
-	
+public class TestDepth {	
 	public static void main(String[] args) {
 		Game game;
 		String file;
