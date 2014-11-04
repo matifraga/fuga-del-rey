@@ -14,12 +14,6 @@ public class TestDepth {
 	public static void main(String[] args) {
 		Game game;
 		String file;
-		System.out.println("//////////////////////////");
-		System.out.println("//////////////////////////");
-		System.out.println("////////Sin podas/////////");
-		System.out.println("//////////////////////////");
-		System.out.println("//////////////////////////");
-		System.out.println();
 		for(int i=7;i<20;i+=4) {
 			System.out.println("*************************");
 			System.out.println("Tablero de dimension "+i);
