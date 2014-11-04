@@ -37,15 +37,6 @@ public class Node {
 		this.name="A"+labelNumber;
 		labelNumber++;
 	}
-	//[shape=box, label="D", fillcolor=red]; 
-	/*
-	public void write(){
-		System.out.println("[shape="+this.form+", label=\""+this.move.toString()+"\""+", fillcolor="+this.color);
-	}*/
-	/*
-	public void setName(String name) {
-		System.out.println();
-	}*/
 	
 	/*Imprime el move con su valor real (invirtiendo su valor si era MIN)*/
 	public void setLabelMove(Move move, boolean invert){
@@ -88,11 +79,6 @@ public class Node {
 				System.out.println("Error al querer escribir el tree.dot");
 			}
 	}
-	/*
-	public void setLabel(String label){
-		Node.label=label;
-	}
-	*/
 	
 	public void link(Node son){ 
 		try{

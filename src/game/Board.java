@@ -17,7 +17,7 @@ public class Board {
 	
 	public Board(int n){
 		if(n<7 || n>19 || n%2==0)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Dimension del tablero invalido");
 		this.size=n;
 		this.board= new Piece[n][n];
 	}
